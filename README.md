@@ -4,7 +4,7 @@
 
 ### Programação em par com IA direto no terminal — versão em português do Brasil
 
-**Tradução, adaptação brasileira e manutenção por [MKBraion (@mkbraion)](https://github.com/mkbraion).**
+**Tradução, adaptação brasileira e manutenção por [mkbraion (@mkbraion)](https://github.com/mkbraion).**
 
 [![GitHub Stars](https://img.shields.io/github/stars/mkbraion/Aider-Brasil?style=flat-square&logo=github&label=Estrelas)](https://github.com/mkbraion/Aider-Brasil/stargazers)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
@@ -35,7 +35,7 @@ Com ele, você conversa com uma IA diretamente no terminal e pode pedir para ela
 
 A proposta desta versão é deixar a apresentação, documentação principal e experiência de aprendizado mais claras para o público brasileiro.
 
-> **Responsável pela versão brasileira:** Nelson Neto — **MKBraion / @mkbraion**  
+> **Responsável pela versão brasileira:** Nelson Neto — **mkbraion / @mkbraion**  
 > Tradução, adaptação de conteúdo, organização e manutenção da edição brasileira.
 
 ---
@@ -388,7 +388,7 @@ Repositório da versão brasileira:
 
 ## 🇧🇷 Responsável pela adaptação brasileira
 
-**Nelson Neto — MKBraion**  
+**Nelson Neto — mkbraion**  
 GitHub: [@mkbraion](https://github.com/mkbraion)
 
 Responsável pela tradução, adaptação, organização e manutenção desta versão destinada ao público brasileiro.
@@ -401,6 +401,6 @@ Esta distribuição brasileira é baseada no projeto Aider e mantém os avisos e
 
 O código-base é distribuído sob a **Apache License 2.0**. O texto integral permanece disponível em [`LICENSE.txt`](LICENSE.txt).
 
-A versão brasileira, sua tradução, documentação e adaptações são mantidas por **Nelson Neto / MKBraion (@mkbraion)**.
+A versão brasileira, sua tradução, documentação e adaptações são mantidas por **Nelson Neto / mkbraion (@mkbraion)**.
 
 Créditos e referências ao projeto-base são preservados nesta seção e nos arquivos de licenciamento necessários para atender às condições da licença aplicável.
