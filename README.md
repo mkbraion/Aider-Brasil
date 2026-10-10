@@ -1,3 +1,19 @@
+<!-- MKBRAION-POLISH:START -->
+<div align="center">
+
+# Aider Brasil
+
+**Assistente de programação com IA no terminal, adaptado para português do Brasil, com integração a LLMs, Git e desenvolvimento assistido por IA.**
+
+[![Repositório](https://img.shields.io/badge/GitHub-Repositório-181717?logo=github)](https://github.com/mkbraion/Aider-Brasil)
+
+</div>
+
+**Stack / tópicos:** ``ai-coding`` · ``aider`` · ``artificial-intelligence`` · ``cli`` · ``coding-assistant`` · ``css`` · ``developer-tools`` · ``frontend`` · ``git`` · ``html`` · ``javascript`` · ``jwt``
+
+> Projeto mantido por [@mkbraion](https://github.com/mkbraion).
+<!-- MKBRAION-POLISH:END -->
+
 <div align="center">
 
 # 🇧🇷 Aider Brasil
