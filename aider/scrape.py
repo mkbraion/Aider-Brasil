@@ -10,8 +10,8 @@ from aider.dump import dump  # noqa: F401
 
 aider_user_agent = f"Aider/{__version__} +{urls.website}"
 
-# Playwright is nice because it has a simple way to install dependencies on most
-# platforms.
+# O Playwright é conveniente porque oferece uma forma simples de instalar dependências
+# na maioria das plataformas.
 
 
 def check_env():
@@ -52,14 +52,14 @@ def install_playwright(io):
     if not has_chromium:
         cmds += " ".join(chromium_cmd) + "\n"
 
-    text = f"""For the best web scraping, install Playwright:
+    text = f"""Para obter a melhor captura de conteúdo web, instale o Playwright:
 
 {cmds}
-See {urls.enable_playwright} for more info.
+Consulte {urls.enable_playwright} para mais informações.
 """
 
     io.tool_output(text)
-    if not io.confirm_ask("Install playwright?", default="y"):
+    if not io.confirm_ask("Instalar o Playwright?", default="y"):
         return
 
     if not has_pip:
@@ -81,11 +81,11 @@ class Scraper:
     playwright_available = None
     playwright_instructions_shown = False
 
-    # Public API...
+    # API pública...
     def __init__(self, print_error=None, playwright_available=None, verify_ssl=True):
         """
-        `print_error` - a function to call to print error/debug info.
-        `verify_ssl` - if False, disable SSL certificate verification when scraping.
+        `print_error` - função chamada para exibir informações de erro/depuração.
+        `verify_ssl` - se False, desativa a verificação do certificado SSL durante a captura.
         """
         if print_error:
             self.print_error = print_error
@@ -97,10 +97,10 @@ class Scraper:
 
     def scrape(self, url):
         """
-        Scrape a url and turn it into readable markdown if it's HTML.
-        If it's plain text or non-HTML, return it as-is.
+        Captura uma URL e a transforma em Markdown legível se o conteúdo for HTML.
+        Se for texto simples ou conteúdo não HTML, retorna sem alterações.
 
-        `url` - the URL to scrape.
+        `url` - URL a ser capturada.
         """
 
         if self.playwright_available:
@@ -109,10 +109,10 @@ class Scraper:
             content, mime_type = self.scrape_with_httpx(url)
 
         if not content:
-            self.print_error(f"Failed to retrieve content from {url}")
+            self.print_error(f"Falha ao obter conteúdo de {url}")
             return None
 
-        # Check if the content is HTML based on MIME type or content
+        # Verifica se o conteúdo é HTML pelo tipo MIME ou pelo próprio conteúdo
         if (mime_type and mime_type.startswith("text/html")) or (
             mime_type is None and self.looks_like_html(content)
         ):
@@ -122,11 +122,9 @@ class Scraper:
         return content
 
     def looks_like_html(self, content):
-        """
-        Check if the content looks like HTML.
-        """
+        """Verifica se o conteúdo parece ser HTML."""
         if isinstance(content, str):
-            # Check for common HTML tags
+            # Verifica tags HTML comuns
             html_patterns = [
                 r"<!DOCTYPE\s+html",
                 r"<html",
@@ -139,7 +137,7 @@ class Scraper:
             return any(re.search(pattern, content, re.IGNORECASE) for pattern in html_patterns)
         return False
 
-    # Internals...
+    # Implementação interna...
     def scrape_with_playwright(self, url):
         import playwright  # noqa: F401
         from playwright.sync_api import Error as PlaywrightError
@@ -169,10 +167,10 @@ class Scraper:
                 try:
                     response = page.goto(url, wait_until="networkidle", timeout=5000)
                 except PlaywrightTimeoutError:
-                    print(f"Page didn't quiesce, scraping content anyway: {url}")
+                    print(f"A página não estabilizou; capturando o conteúdo mesmo assim: {url}")
                     response = None
                 except PlaywrightError as e:
-                    self.print_error(f"Error navigating to {url}: {str(e)}")
+                    self.print_error(f"Erro ao acessar {url}: {str(e)}")
                     return None, None
 
                 try:
@@ -183,7 +181,7 @@ class Scraper:
                         if content_type:
                             mime_type = content_type.split(";")[0]
                 except PlaywrightError as e:
-                    self.print_error(f"Error retrieving page content: {str(e)}")
+                    self.print_error(f"Erro ao obter o conteúdo da página: {str(e)}")
                     content = None
                     mime_type = None
             finally:
@@ -203,9 +201,9 @@ class Scraper:
                 response.raise_for_status()
                 return response.text, response.headers.get("content-type", "").split(";")[0]
         except httpx.HTTPError as http_err:
-            self.print_error(f"HTTP error occurred: {http_err}")
+            self.print_error(f"Ocorreu um erro HTTP: {http_err}")
         except Exception as err:
-            self.print_error(f"An error occurred: {err}")
+            self.print_error(f"Ocorreu um erro: {err}")
         return None, None
 
     def try_pandoc(self):
@@ -222,7 +220,7 @@ class Scraper:
         try:
             pypandoc.download_pandoc(delete_installer=True)
         except Exception as err:
-            self.print_error(f"Unable to install pandoc: {err}")
+            self.print_error(f"Não foi possível instalar o pandoc: {err}")
             return
 
         self.pandoc_available = True
@@ -279,6 +277,6 @@ def main(url):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python playw.py <URL>")
+        print("Uso: python playw.py <URL>")
         sys.exit(1)
     main(sys.argv[1])
