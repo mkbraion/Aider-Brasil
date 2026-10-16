@@ -24,7 +24,7 @@ def install_help_extra(io):
     res = utils.check_pip_install_extra(
         io,
         "llama_index.embeddings.huggingface",
-        "To use interactive /help you need to install the help extras",
+        "Para usar o /help interativo, você precisa instalar os extras de ajuda",
         pip_install_cmd,
     )
     return res
@@ -44,38 +44,38 @@ def fname_to_url(filepath):
     index = "index.md"
     md = ".md"
 
-    # Convert backslashes to forward slashes for consistency
+    # Converte barras invertidas em barras normais para manter a consistência
     filepath = filepath.replace("\\", "/")
 
-    # Convert to Path object for easier manipulation
+    # Converte para Path para facilitar a manipulação
     path = Path(filepath)
 
-    # Split the path into parts
+    # Divide o caminho em partes
     parts = path.parts
 
-    # Find the 'website' part in the path
+    # Localiza a parte 'website' no caminho
     try:
         website_index = [p.lower() for p in parts].index(website.lower())
     except ValueError:
-        return ""  # 'website' not found in the path
+        return ""  # 'website' não encontrado no caminho
 
-    # Extract the part of the path starting from 'website'
+    # Extrai a parte do caminho a partir de 'website'
     relevant_parts = parts[website_index + 1 :]
 
-    # Handle _includes directory
+    # Trata o diretório _includes
     if relevant_parts and relevant_parts[0].lower() == "_includes":
         return ""
 
-    # Join the remaining parts
+    # Junta as partes restantes
     url_path = "/".join(relevant_parts)
 
-    # Handle index.md and other .md files
+    # Trata index.md e outros arquivos .md
     if url_path.lower().endswith(index.lower()):
         url_path = url_path[: -len(index)]
     elif url_path.lower().endswith(md.lower()):
         url_path = url_path[: -len(md)] + ".html"
 
-    # Ensure the URL starts and ends with '/'
+    # Garante que a URL comece e termine com '/'
     url_path = url_path.strip("/")
 
     return f"https://aider.chat/{url_path}"
@@ -145,9 +145,9 @@ class Help:
     def ask(self, question):
         nodes = self.retriever.retrieve(question)
 
-        context = f"""# Question: {question}
+        context = f"""# Pergunta: {question}
 
-# Relevant docs:
+# Documentação relevante:
 
 """  # noqa: E231
 
