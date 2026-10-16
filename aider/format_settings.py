@@ -1,5 +1,5 @@
 def scrub_sensitive_info(args, text):
-    # Replace sensitive information with last 4 characters
+    # Substitui informações sensíveis pelos 4 últimos caracteres
     if text and args.openai_api_key:
         last_4 = args.openai_api_key[-4:]
         text = text.replace(args.openai_api_key, f"...{last_4}")
@@ -11,14 +11,14 @@ def scrub_sensitive_info(args, text):
 
 def format_settings(parser, args):
     show = scrub_sensitive_info(args, parser.format_values())
-    # clean up the headings for consistency w/ new lines
+    # Organiza e traduz os cabeçalhos mantendo compatibilidade com a saída do configargparse
     heading_env = "Environment Variables:"
     heading_defaults = "Defaults:"
     if heading_env in show:
-        show = show.replace(heading_env, "\n" + heading_env)
-        show = show.replace(heading_defaults, "\n" + heading_defaults)
+        show = show.replace(heading_env, "\nVariáveis de ambiente:")
+        show = show.replace(heading_defaults, "\nValores padrão:")
     show += "\n"
-    show += "Option settings:\n"
+    show += "Configurações das opções:\n"
     for arg, val in sorted(vars(args).items()):
         if val:
             val = scrub_sensitive_info(args, str(val))
