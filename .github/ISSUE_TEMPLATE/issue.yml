@@ -1,21 +1,21 @@
-name: Question or bug report
-description: Submit a question or bug report to help us improve aider
+name: Pergunta ou relatório de bug
+description: Envie uma pergunta ou relatório de bug para nos ajudar a melhorar o Aider
 labels: []
 body:
   - type: textarea
     attributes:
-      label: Issue
-      description: Please describe your problem or question.
+      label: Problema
+      description: Descreva seu problema ou sua dúvida.
     validations:
-      required: true      
+      required: true
   - type: textarea
     attributes:
-      label: Version and model info
-      description: Please include aider version, model being used (`gpt-4-xxx`, etc) and any other switches or config settings that are active.
-      placeholder: |          
+      label: Versão e informações do modelo
+      description: Informe a versão do Aider, o modelo utilizado (`gpt-4-xxx`, etc.) e quaisquer outras opções ou configurações que estejam ativas.
+      placeholder: |
         Aider v0.XX.Y
-        Model: gpt-N-... using ???? edit format
-        Git repo: .git with ### files
-        Repo-map: using #### tokens
+        Modelo: gpt-N-... usando o formato de edição ????
+        Repositório Git: .git com ### arquivos
+        Mapa do repositório: usando #### tokens
     validations:
       required: false
