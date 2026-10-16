@@ -6,7 +6,7 @@ from .dump import dump  # noqa: F401
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python diffs.py file1 file")
+        print("Uso: python diffs.py arquivo1 arquivo2")
         sys.exit(1)
 
     file_orig, file_updated = sys.argv[1], sys.argv[2]
@@ -42,9 +42,9 @@ def assert_newlines(lines):
 
 def diff_partial_update(lines_orig, lines_updated, final=False, fname=None):
     """
-    Given only the first part of an updated file, show the diff while
-    ignoring the block of "deleted" lines that are past the end of the
-    partially complete update.
+    Recebe apenas a primeira parte de um arquivo atualizado e mostra o diff,
+    ignorando o bloco de linhas "excluídas" que fica depois do final da
+    atualização parcialmente concluída.
     """
 
     # dump(lines_orig)
@@ -68,7 +68,7 @@ def diff_partial_update(lines_orig, lines_updated, final=False, fname=None):
     else:
         pct = 50
     bar = create_progress_bar(pct)
-    bar = f" {last_non_deleted:3d} / {num_orig_lines:3d} lines [{bar}] {pct:3.0f}%\n"
+    bar = f" {last_non_deleted:3d} / {num_orig_lines:3d} linhas [{bar}] {pct:3.0f}%\n"
 
     lines_orig = lines_orig[:last_non_deleted]
 
@@ -91,7 +91,7 @@ def diff_partial_update(lines_orig, lines_updated, final=False, fname=None):
     show = f"{backticks}diff\n"
     if fname:
         show += f"--- {fname} original\n"
-        show += f"+++ {fname} updated\n"
+        show += f"+++ {fname} atualizado\n"
 
     show += diff
 
@@ -115,10 +115,10 @@ def find_last_non_deleted(lines_orig, lines_updated):
             num_orig += 1
             last_non_deleted_orig = num_orig
         elif code == "-":
-            # line only in orig
+            # linha presente apenas no original
             num_orig += 1
         elif code == "+":
-            # line only in updated
+            # linha presente apenas no arquivo atualizado
             pass
 
     return last_non_deleted_orig
