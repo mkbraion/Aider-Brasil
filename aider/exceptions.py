@@ -17,42 +17,42 @@ EXCEPTIONS = [
     ExInfo(
         "AuthenticationError",
         False,
-        "The API provider is not able to authenticate you. Check your API key.",
+        "O provedor da API não conseguiu autenticar você. Verifique sua chave de API.",
     ),
     ExInfo("AzureOpenAIError", True, None),
-    ExInfo("BadGatewayError", True, "The API provider's servers are down or overloaded."),
+    ExInfo("BadGatewayError", True, "Os servidores do provedor da API estão indisponíveis ou sobrecarregados."),
     ExInfo("BadRequestError", False, None),
     ExInfo("BudgetExceededError", True, None),
     ExInfo(
         "ContentPolicyViolationError",
         True,
-        "The API provider has refused the request due to a safety policy about the content.",
+        "O provedor da API recusou a solicitação devido a uma política de segurança relacionada ao conteúdo.",
     ),
-    ExInfo("ContextWindowExceededError", False, None),  # special case handled in base_coder
-    ExInfo("ImageFetchError", False, "The API provider was unable to fetch one or more images."),
-    ExInfo("InternalServerError", True, "The API provider's servers are down or overloaded."),
+    ExInfo("ContextWindowExceededError", False, None),  # caso especial tratado em base_coder
+    ExInfo("ImageFetchError", False, "O provedor da API não conseguiu buscar uma ou mais imagens."),
+    ExInfo("InternalServerError", True, "Os servidores do provedor da API estão indisponíveis ou sobrecarregados."),
     ExInfo("InvalidRequestError", True, None),
     ExInfo("JSONSchemaValidationError", True, None),
     ExInfo("NotFoundError", False, None),
     ExInfo(
         "PermissionDeniedError",
         False,
-        "Permission was denied. Check your API key and/or credentials.",
+        "A permissão foi negada. Verifique sua chave de API e/ou suas credenciais.",
     ),
     ExInfo("OpenAIError", True, None),
     ExInfo(
         "RateLimitError",
         True,
-        "The API provider has rate limited you. Try again later or check your quotas.",
+        "O provedor da API aplicou um limite de requisições. Tente novamente mais tarde ou verifique suas cotas.",
     ),
     ExInfo("RouterRateLimitError", True, None),
-    ExInfo("ServiceUnavailableError", True, "The API provider's servers are down or overloaded."),
+    ExInfo("ServiceUnavailableError", True, "Os servidores do provedor da API estão indisponíveis ou sobrecarregados."),
     ExInfo("UnprocessableEntityError", True, None),
     ExInfo("UnsupportedParamsError", True, None),
     ExInfo(
         "Timeout",
         True,
-        "The API provider timed out without returning a response. They may be down or overloaded.",
+        "O provedor da API excedeu o tempo limite sem retornar uma resposta. Ele pode estar indisponível ou sobrecarregado.",
     ),
 ]
 
@@ -68,12 +68,12 @@ class LiteLLMExceptions:
         import litellm
 
         for var in dir(litellm):
-            # Filter by BaseException because instances of non-exception classes cannot be caught.
-            # `litellm.ErrorEventError` is an example of a regular class which just happens to end
-            # with `Error`.
+            # Filtra por BaseException porque instâncias de classes que não são exceções não podem ser capturadas.
+            # `litellm.ErrorEventError` é um exemplo de classe comum cujo nome apenas termina
+            # com `Error`.
             if var.endswith("Error") and issubclass(getattr(litellm, var), BaseException):
                 if var not in self.exception_info:
-                    raise ValueError(f"{var} is in litellm but not in aider's exceptions list")
+                    raise ValueError(f"{var} existe no litellm, mas não está na lista de exceções do aider")
 
         for var in self.exception_info:
             ex = getattr(litellm, var)
@@ -83,31 +83,31 @@ class LiteLLMExceptions:
         return tuple(self.exceptions)
 
     def get_ex_info(self, ex):
-        """Return the ExInfo for a given exception instance"""
+        """Retorna o ExInfo correspondente a uma determinada instância de exceção."""
         import litellm
 
         if ex.__class__ is litellm.APIConnectionError:
             if "boto3" in str(ex):
-                return ExInfo("APIConnectionError", False, "You need to: pip install boto3")
+                return ExInfo("APIConnectionError", False, "Você precisa executar: pip install boto3")
             if "OpenrouterException" in str(ex) and "'choices'" in str(ex):
                 return ExInfo(
                     "APIConnectionError",
                     True,
                     (
-                        "OpenRouter or the upstream API provider is down, overloaded or rate"
-                        " limiting your requests."
+                        "O OpenRouter ou o provedor de API upstream está indisponível, sobrecarregado ou"
+                        " limitando a taxa das suas solicitações."
                     ),
                 )
 
-        # Check for specific non-retryable APIError cases like insufficient credits
+        # Verifica casos específicos de APIError que não devem ser repetidos, como créditos insuficientes
         if ex.__class__ is litellm.APIError:
             err_str = str(ex).lower()
             if "insufficient credits" in err_str and '"code":402' in err_str:
                 return ExInfo(
                     "APIError",
                     False,
-                    "Insufficient credits with the API provider. Please add credits.",
+                    "Créditos insuficientes no provedor da API. Adicione créditos para continuar.",
                 )
-            # Fall through to default APIError handling if not the specific credits error
+            # Segue para o tratamento padrão de APIError quando não for o caso específico de créditos
 
         return self.exceptions.get(ex.__class__, ExInfo(None, None, None))
