@@ -41,7 +41,7 @@ class Voice:
         if sf is None:
             raise SoundDeviceError
         try:
-            print("Initializing sound device...")
+            print("Inicializando dispositivo de áudio...")
             import sounddevice as sd
 
             self.sd = sd
@@ -49,7 +49,7 @@ class Voice:
             devices = sd.query_devices()
 
             if device_name:
-                # Find the device with matching name
+                # Encontra o dispositivo com o nome correspondente
                 device_id = None
                 for i, device in enumerate(devices):
                     if device_name in device["name"]:
@@ -58,11 +58,11 @@ class Voice:
                 if device_id is None:
                     available_inputs = [d["name"] for d in devices if d["max_input_channels"] > 0]
                     raise ValueError(
-                        f"Device '{device_name}' not found. Available input devices:"
+                        f"Dispositivo '{device_name}' não encontrado. Dispositivos de entrada disponíveis:"
                         f" {available_inputs}"
                     )
 
-                print(f"Using input device: {device_name} (ID: {device_id})")
+                print(f"Usando dispositivo de entrada: {device_name} (ID: {device_id})")
 
                 self.device_id = device_id
             else:
@@ -71,11 +71,11 @@ class Voice:
         except (OSError, ModuleNotFoundError):
             raise SoundDeviceError
         if audio_format not in ["wav", "mp3", "webm"]:
-            raise ValueError(f"Unsupported audio format: {audio_format}")
+            raise ValueError(f"Formato de áudio não suportado: {audio_format}")
         self.audio_format = audio_format
 
     def callback(self, indata, frames, time, status):
-        """This is called (from a separate thread) for each audio block."""
+        """Chamado (em uma thread separada) para cada bloco de áudio."""
         import numpy as np
 
         rms = np.sqrt(np.mean(indata**2))
@@ -101,7 +101,7 @@ class Voice:
         bar = bar[:num]
 
         dur = time.time() - self.start_time
-        return f"Recording, press ENTER when done... {dur:.1f}sec {bar}"
+        return f"Gravando, pressione ENTER quando terminar... {dur:.1f}s {bar}"
 
     def record_and_transcribe(self, history=None, language=None):
         try:
@@ -109,8 +109,8 @@ class Voice:
         except KeyboardInterrupt:
             return
         except SoundDeviceError as e:
-            print(f"Error: {e}")
-            print("Please ensure you have a working audio input device connected and try again.")
+            print(f"Erro: {e}")
+            print("Verifique se há um dispositivo de entrada de áudio funcionando e tente novamente.")
             return
 
     def raw_record_and_transcribe(self, history, language):
@@ -121,10 +121,10 @@ class Voice:
         try:
             sample_rate = int(self.sd.query_devices(self.device_id, "input")["default_samplerate"])
         except (TypeError, ValueError):
-            sample_rate = 16000  # fallback to 16kHz if unable to query device
+            sample_rate = 16000  # usa 16 kHz se não for possível consultar o dispositivo
         except self.sd.PortAudioError:
             raise SoundDeviceError(
-                "No audio input device detected. Please check your audio settings and try again."
+                "Nenhum dispositivo de entrada de áudio foi detectado. Verifique as configurações de áudio e tente novamente."
             )
 
         self.start_time = time.time()
@@ -135,7 +135,7 @@ class Voice:
             ):
                 prompt(self.get_prompt, refresh_interval=0.1)
         except self.sd.PortAudioError as err:
-            raise SoundDeviceError(f"Error accessing audio input device: {err}")
+            raise SoundDeviceError(f"Erro ao acessar o dispositivo de entrada de áudio: {err}")
 
         with sf.SoundFile(temp_wav, mode="x", samplerate=sample_rate, channels=1) as file:
             while not self.q.empty():
@@ -143,10 +143,10 @@ class Voice:
 
         use_audio_format = self.audio_format
 
-        # Check file size and offer to convert to mp3 if too large
+        # Verifica o tamanho e usa mp3 se o arquivo WAV for grande demais
         file_size = os.path.getsize(temp_wav)
         if file_size > 24.9 * 1024 * 1024 and self.audio_format == "wav":
-            print("\nWarning: {temp_wav} is too large, switching to mp3 format.")
+            print(f"\nAviso: {temp_wav} é grande demais; alternando para o formato mp3.")
             use_audio_format = "mp3"
 
         filename = temp_wav
@@ -158,11 +158,11 @@ class Voice:
                 os.remove(temp_wav)
                 filename = new_filename
             except (CouldntDecodeError, CouldntEncodeError) as e:
-                print(f"Error converting audio: {e}")
+                print(f"Erro ao converter áudio: {e}")
             except (OSError, FileNotFoundError) as e:
-                print(f"File system error during conversion: {e}")
+                print(f"Erro do sistema de arquivos durante a conversão: {e}")
             except Exception as e:
-                print(f"Unexpected error during audio conversion: {e}")
+                print(f"Erro inesperado durante a conversão de áudio: {e}")
 
         with open(filename, "rb") as fh:
             try:
@@ -170,7 +170,7 @@ class Voice:
                     model="whisper-1", file=fh, prompt=history, language=language
                 )
             except Exception as err:
-                print(f"Unable to transcribe {filename}: {err}")
+                print(f"Não foi possível transcrever {filename}: {err}")
                 return
 
         if filename != temp_wav:
@@ -183,5 +183,5 @@ class Voice:
 if __name__ == "__main__":
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise ValueError("Please set the OPENAI_API_KEY environment variable.")
+        raise ValueError("Defina a variável de ambiente OPENAI_API_KEY.")
     print(Voice().record_and_transcribe())
