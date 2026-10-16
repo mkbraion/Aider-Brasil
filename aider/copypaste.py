@@ -5,7 +5,7 @@ import pyperclip
 
 
 class ClipboardWatcher:
-    """Watches clipboard for changes and updates IO placeholder"""
+    """Monitora alterações na área de transferência e atualiza o placeholder de entrada/saída."""
 
     def __init__(self, io, verbose=False):
         self.io = io
@@ -16,7 +16,7 @@ class ClipboardWatcher:
         self.io.clipboard_watcher = self
 
     def start(self):
-        """Start watching clipboard for changes"""
+        """Inicia o monitoramento de alterações na área de transferência."""
         self.stop_event = threading.Event()
         self.last_clipboard = pyperclip.paste()
 
@@ -36,14 +36,14 @@ class ClipboardWatcher:
                     if self.verbose:
                         from aider.dump import dump
 
-                        dump(f"Clipboard watcher error: {e}")
+                        dump(f"Erro no monitor da área de transferência: {e}")
                     continue
 
         self.watcher_thread = threading.Thread(target=watch_clipboard, daemon=True)
         self.watcher_thread.start()
 
     def stop(self):
-        """Stop watching clipboard for changes"""
+        """Interrompe o monitoramento de alterações na área de transferência."""
         if self.stop_event:
             self.stop_event.set()
         if self.watcher_thread:
@@ -53,7 +53,7 @@ class ClipboardWatcher:
 
 
 def main():
-    """Example usage of the clipboard watcher"""
+    """Exemplo de uso do monitor da área de transferência."""
     from aider.io import InputOutput
 
     io = InputOutput()
@@ -64,7 +64,7 @@ def main():
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print("\nStopped watching clipboard")
+        print("\nMonitoramento da área de transferência interrompido")
         watcher.stop()
 
 
