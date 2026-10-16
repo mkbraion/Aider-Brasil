@@ -18,16 +18,16 @@ class DotEnvFormatter(argparse.HelpFormatter):
     def _format_text(self, text):
         return f"""
 ##########################################################
-# Sample aider .env file.
-# Place at the root of your git repo.
-# Or use `aider --env <fname>` to specify.
+# Exemplo de arquivo .env do aider.
+# Coloque-o na raiz do seu repositório git.
+# Ou use `aider --env <arquivo>` para especificar outro arquivo.
 ##########################################################
 
 #################
-# LLM parameters:
+# Parâmetros do LLM:
 #
-# Include xxx_API_KEY parameters and other params needed for your LLMs.
-# See {urls.llms} for details.
+# Inclua parâmetros xxx_API_KEY e outros parâmetros necessários para seus LLMs.
+# Consulte {urls.llms} para obter detalhes.
 
 ## OpenAI
 #OPENAI_API_KEY=
@@ -91,13 +91,14 @@ class YamlHelpFormatter(argparse.HelpFormatter):
     def _format_text(self, text):
         return """
 ##########################################################
-# Sample .aider.conf.yml
-# This file lists *all* the valid configuration entries.
-# Place in your home dir, or at the root of your git repo.
+# Exemplo de .aider.conf.yml
+# Este arquivo lista *todas* as entradas de configuração válidas.
+# Coloque-o no seu diretório pessoal ou na raiz do repositório git.
 ##########################################################
 
-# Note: You can only put OpenAI and Anthropic API keys in the YAML
-# config file. Keys for all APIs can be stored in a .env file
+# Observação: somente chaves de API da OpenAI e Anthropic podem ser
+# colocadas no arquivo de configuração YAML. Chaves de todas as APIs
+# podem ser armazenadas em um arquivo .env.
 # https://aider.chat/docs/config/dotenv.html
 
 """
@@ -110,7 +111,7 @@ class YamlHelpFormatter(argparse.HelpFormatter):
 
         metavar = action.metavar
         if not metavar and isinstance(action, argparse._StoreAction):
-            metavar = "VALUE"
+            metavar = "VALOR"
 
         default = action.default
         if default == argparse.SUPPRESS:
@@ -149,7 +150,7 @@ class YamlHelpFormatter(argparse.HelpFormatter):
                 parts.append(f"#{switch}: {default}\n")
         elif action.nargs in ("*", "+") or isinstance(action, argparse._AppendAction):
             parts.append(f"#{switch}: xxx")
-            parts.append("## Specify multiple values like this:")
+            parts.append("## Especifique vários valores desta forma:")
             parts.append(f"#{switch}:")
             parts.append("#  - xxx")
             parts.append("#  - yyy")
@@ -192,7 +193,7 @@ class MarkdownHelpFormatter(argparse.HelpFormatter):
 
         metavar = action.metavar
         if not metavar and isinstance(action, argparse._StoreAction):
-            metavar = "VALUE"
+            metavar = "VALOR"
 
         for switch in action.option_strings:
             if switch.startswith("--"):
@@ -206,10 +207,10 @@ class MarkdownHelpFormatter(argparse.HelpFormatter):
             parts.append(action.help + "  ")
 
         if action.default not in (argparse.SUPPRESS, None):
-            parts.append(f"Default: {action.default}  ")
+            parts.append(f"Padrão: {action.default}  ")
 
         if action.env_var:
-            parts.append(f"Environment variable: `{action.env_var}`  ")
+            parts.append(f"Variável de ambiente: `{action.env_var}`  ")
 
         if len(action.option_strings) > 1:
             parts.append("Aliases:")
