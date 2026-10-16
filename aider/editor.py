@@ -1,11 +1,11 @@
 """
-Editor module for handling system text editor interactions.
+Módulo de editor para lidar com interações com o editor de texto do sistema.
 
-This module provides functionality to:
-- Discover and launch the system's configured text editor
-- Create and manage temporary files for editing
-- Handle editor preferences from environment variables
-- Support cross-platform editor operations
+Este módulo fornece funcionalidades para:
+- Descobrir e iniciar o editor de texto configurado no sistema
+- Criar e gerenciar arquivos temporários para edição
+- Lidar com preferências de editor definidas por variáveis de ambiente
+- Oferecer suporte a operações de editor entre diferentes plataformas
 """
 
 import os
@@ -26,11 +26,11 @@ console = Console()
 
 def print_status_message(success, message, style=None):
     """
-    Print a status message with appropriate styling.
+    Exibe uma mensagem de status com a formatação apropriada.
 
-    :param success: Whether the operation was successful
-    :param message: The message to display
-    :param style: Optional style override. If None, uses green for success and red for failure
+    :param success: Indica se a operação foi bem-sucedida
+    :param message: A mensagem a ser exibida
+    :param style: Substituição opcional de estilo. Se for None, usa verde em caso de sucesso e vermelho em caso de falha
     """
     if style is None:
         style = "bold green" if success else "bold red"
@@ -45,14 +45,14 @@ def write_temp_file(
     dir=None,
 ):
     """
-    Create a temporary file with the given input data.
+    Cria um arquivo temporário com os dados de entrada fornecidos.
 
-    :param input_data: Content to write to the temporary file
-    :param suffix: Optional file extension (without the dot)
-    :param prefix: Optional prefix for the temporary filename
-    :param dir: Optional directory to create the file in
-    :return: Path to the created temporary file
-    :raises: OSError if file creation or writing fails
+    :param input_data: Conteúdo a ser gravado no arquivo temporário
+    :param suffix: Extensão opcional do arquivo (sem o ponto)
+    :param prefix: Prefixo opcional para o nome do arquivo temporário
+    :param dir: Diretório opcional no qual criar o arquivo
+    :return: Caminho para o arquivo temporário criado
+    :raises: OSError se a criação ou gravação do arquivo falhar
     """
     kwargs = {"prefix": prefix, "dir": dir}
     if suffix:
@@ -69,18 +69,18 @@ def write_temp_file(
 
 def get_environment_editor(default=None):
     """
-    Fetches the preferred editor from the environment variables.
+    Obtém o editor preferido a partir das variáveis de ambiente.
 
-    This function checks the following environment variables in order to
-    determine the user's preferred editor:
+    Esta função verifica as seguintes variáveis de ambiente, nesta ordem, para
+    determinar o editor preferido do usuário:
 
      - VISUAL
      - EDITOR
 
-    :param default: The default editor to return if no environment variable is set.
-    :type default: str or None
-    :return: The preferred editor as specified by environment variables or the default value.
-    :rtype: str or None
+    :param default: Editor padrão retornado quando nenhuma variável de ambiente está definida.
+    :type default: str ou None
+    :return: Editor preferido conforme definido pelas variáveis de ambiente ou o valor padrão.
+    :rtype: str ou None
     """
     editor = os.environ.get("VISUAL", os.environ.get("EDITOR", default))
     return editor
@@ -88,12 +88,12 @@ def get_environment_editor(default=None):
 
 def discover_editor(editor_override=None):
     """
-    Discovers and returns the appropriate editor command.
+    Descobre e retorna o comando de editor apropriado.
 
-    Handles cases where the editor command includes arguments, including quoted arguments
-    with spaces (e.g. 'vim -c "set noswapfile"').
+    Lida com casos em que o comando do editor inclui argumentos, inclusive argumentos entre aspas
+    que contêm espaços (por exemplo, 'vim -c "set noswapfile"').
 
-    :return: The editor command as a string
+    :return: Comando do editor como string
     :rtype: str
     """
     system = platform.system()
@@ -114,17 +114,17 @@ def discover_editor(editor_override=None):
 
 def pipe_editor(input_data="", suffix=None, editor=None):
     """
-    Opens the system editor with optional input data and returns the edited content.
+    Abre o editor do sistema com dados de entrada opcionais e retorna o conteúdo editado.
 
-    This function creates a temporary file with the provided input data, opens it in
-    the system editor, waits for the user to make changes and close the editor, then
-    reads and returns the modified content. The temporary file is deleted afterwards.
+    Esta função cria um arquivo temporário com os dados de entrada fornecidos, abre esse arquivo
+    no editor do sistema, aguarda o usuário fazer as alterações e fechar o editor e, em seguida,
+    lê e retorna o conteúdo modificado. O arquivo temporário é excluído depois.
 
-    :param input_data: Initial content to populate the editor with
+    :param input_data: Conteúdo inicial usado para preencher o editor
     :type input_data: str
-    :param suffix: Optional file extension for the temporary file (e.g. '.txt', '.md')
-    :type suffix: str or None
-    :return: The edited content after the editor is closed
+    :param suffix: Extensão opcional do arquivo temporário (por exemplo, '.txt', '.md')
+    :type suffix: str ou None
+    :return: Conteúdo editado após o fechamento do editor
     :rtype: str
     """
     filepath = write_temp_file(input_data, suffix)
@@ -140,8 +140,8 @@ def pipe_editor(input_data="", suffix=None, editor=None):
         print_status_message(
             False,
             (
-                f"WARNING: Unable to delete temporary file {filepath!r}. You may need to delete it"
-                " manually."
+                f"AVISO: não foi possível excluir o arquivo temporário {filepath!r}. Talvez seja necessário excluí-lo"
+                " manualmente."
             ),
         )
     return output_data
