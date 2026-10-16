@@ -16,35 +16,35 @@ PERCENT = 10
 
 
 def compute_hex_threshold(percent):
-    """Convert percentage to 6-digit hex threshold.
+    """Converte uma porcentagem em um limite hexadecimal de 6 dígitos.
 
     Args:
-        percent: Percentage threshold (0-100)
+        percent: Limite percentual (0-100)
 
     Returns:
-        str: 6-digit hex threshold
+        str: Limite hexadecimal de 6 dígitos
     """
     return format(int(0xFFFFFF * percent / 100), "06x")
 
 
 def is_uuid_in_percentage(uuid_str, percent):
-    """Check if a UUID string falls within the first X percent of the UUID space.
+    """Verifica se uma UUID está dentro dos primeiros X por cento do espaço de UUIDs.
 
     Args:
-        uuid_str: UUID string to test
-        percent: Percentage threshold (0-100)
+        uuid_str: UUID a ser verificada
+        percent: Limite percentual (0-100)
 
     Returns:
-        bool: True if UUID falls within the first X percent
+        bool: True se a UUID estiver dentro dos primeiros X por cento
     """
     if not (0 <= percent <= 100):
-        raise ValueError("Percentage must be between 0 and 100")
+        raise ValueError("A porcentagem deve estar entre 0 e 100")
 
     if not uuid_str:
         return False
 
-    # Convert percentage to hex threshold (1% = "04...", 10% = "1a...", etc)
-    # Using first 6 hex digits
+    # Converte a porcentagem em um limite hexadecimal (1% = "04...", 10% = "1a...", etc.)
+    # Usa os 6 primeiros dígitos hexadecimais
     if percent == 0:
         return False
 
@@ -58,16 +58,16 @@ posthog_host = "https://us.i.posthog.com"
 
 
 class Analytics:
-    # providers
+    # provedores
     mp = None
     ph = None
 
-    # saved
+    # dados salvos
     user_id = None
     permanently_disable = None
     asked_opt_in = None
 
-    # ephemeral
+    # dados temporários da sessão
     logfile = None
 
     def __init__(
@@ -104,7 +104,7 @@ class Analytics:
             host=self.custom_posthog_host or posthog_host,
             on_error=self.posthog_error,
             enable_exception_autocapture=True,
-            super_properties=self.get_system_info(),  # Add system info to all events
+            super_properties=self.get_system_info(),  # Adiciona informações do sistema a todos os eventos
         )
 
     def disable(self, permanently):
@@ -140,7 +140,7 @@ class Analytics:
             data_file.parent.mkdir(parents=True, exist_ok=True)
             return data_file
         except OSError:
-            # If we can't create/access the directory, just disable analytics
+            # Se não for possível criar ou acessar o diretório, apenas desativa a telemetria
             self.disable(permanently=False)
             return None
 
@@ -180,7 +180,7 @@ class Analytics:
         try:
             data_file.write_text(json.dumps(data, indent=4))
         except OSError:
-            # If we can't write the file, just disable analytics
+            # Se não for possível gravar o arquivo, apenas desativa a telemetria
             self.disable(permanently=False)
 
     def get_system_info(self):
@@ -204,7 +204,7 @@ class Analytics:
         return None
 
     def posthog_error(self):
-        """disable posthog if we get an error"""
+        """Desativa o PostHog caso ocorra um erro."""
         print("X" * 100)
         # https://github.com/PostHog/posthog-python/blob/9e1bb8c58afaa229da24c4fb576c08bb88a75752/posthog/consumer.py#L86
         # https://github.com/Aider-AI/aider/issues/2532
@@ -223,7 +223,7 @@ class Analytics:
 
         properties.update(kwargs)
 
-        # Handle numeric values
+        # Mantém valores numéricos como números
         for key, value in properties.items():
             if isinstance(value, (int, float)):
                 properties[key] = value
@@ -234,7 +234,7 @@ class Analytics:
             try:
                 self.mp.track(self.user_id, event_name, dict(properties))
             except MixpanelException:
-                self.mp = None  # Disable mixpanel on connection errors
+                self.mp = None  # Desativa o Mixpanel em caso de erro de conexão
 
         if self.ph:
             self.ph.capture(event_name, distinct_id=self.user_id, properties=dict(properties))
@@ -251,7 +251,7 @@ class Analytics:
                     json.dump(log_entry, f)
                     f.write("\n")
             except OSError:
-                pass  # Ignore OS errors when writing to logfile
+                pass  # Ignora erros do sistema operacional ao gravar o arquivo de log
 
 
 if __name__ == "__main__":
