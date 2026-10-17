@@ -14,13 +14,13 @@ VERSION_CHECK_FNAME = Path.home() / ".aider" / "caches" / "versioncheck"
 
 def install_from_main_branch(io):
     """
-    Install the latest version of aider from the main branch of the GitHub repository.
+    Instala a versão mais recente do aider a partir da branch main do repositório GitHub.
     """
 
     return utils.check_pip_install_extra(
         io,
         None,
-        "Install the development version of aider from the main branch?",
+        "Instalar a versão de desenvolvimento do aider a partir da branch main?",
         ["git+https://github.com/Aider-AI/aider.git"],
         self_update=True,
     )
@@ -28,18 +28,18 @@ def install_from_main_branch(io):
 
 def install_upgrade(io, latest_version=None):
     """
-    Install the latest version of aider from PyPI.
+    Instala a versão mais recente do aider a partir do PyPI.
     """
 
     if latest_version:
-        new_ver_text = f"Newer aider version v{latest_version} is available."
+        new_ver_text = f"Uma versão mais recente do aider, v{latest_version}, está disponível."
     else:
-        new_ver_text = "Install latest version of aider?"
+        new_ver_text = "Instalar a versão mais recente do aider?"
 
     docker_image = os.environ.get("AIDER_DOCKER_IMAGE")
     if docker_image:
         text = f"""
-{new_ver_text} To upgrade, run:
+{new_ver_text} Para atualizar, execute:
 
     docker pull {docker_image}
 """
@@ -55,7 +55,7 @@ def install_upgrade(io, latest_version=None):
     )
 
     if success:
-        io.tool_output("Re-run aider to use new version.")
+        io.tool_output("Execute o aider novamente para usar a nova versão.")
         sys.exit()
 
     return
@@ -68,10 +68,10 @@ def check_version(io, just_check=False, verbose=False):
         if 0 < since < day:
             if verbose:
                 hours = since / 60 / 60
-                io.tool_output(f"Too soon to check version: {hours:.1f} hours")
+                io.tool_output(f"Ainda é cedo para verificar a versão: {hours:.1f} horas")
             return
 
-    # To keep startup fast, avoid importing this unless needed
+    # Para manter a inicialização rápida, evita importar isto até que seja necessário
     import requests
 
     try:
@@ -81,14 +81,14 @@ def check_version(io, just_check=False, verbose=False):
         current_version = aider.__version__
 
         if just_check or verbose:
-            io.tool_output(f"Current version: {current_version}")
-            io.tool_output(f"Latest version: {latest_version}")
+            io.tool_output(f"Versão atual: {current_version}")
+            io.tool_output(f"Versão mais recente: {latest_version}")
 
         is_update_available = packaging.version.parse(latest_version) > packaging.version.parse(
             current_version
         )
     except Exception as err:
-        io.tool_error(f"Error checking pypi for new version: {err}")
+        io.tool_error(f"Erro ao verificar uma nova versão no PyPI: {err}")
         return False
     finally:
         VERSION_CHECK_FNAME.parent.mkdir(parents=True, exist_ok=True)
@@ -99,9 +99,9 @@ def check_version(io, just_check=False, verbose=False):
 
     if just_check or verbose:
         if is_update_available:
-            io.tool_output("Update available")
+            io.tool_output("Atualização disponível")
         else:
-            io.tool_output("No update available")
+            io.tool_output("Nenhuma atualização disponível")
 
     if just_check:
         return is_update_available
