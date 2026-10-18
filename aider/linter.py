@@ -14,7 +14,7 @@ from grep_ast.tsl import get_parser  # noqa: E402
 from aider.dump import dump  # noqa: F401
 from aider.run_cmd import run_cmd_subprocess  # noqa: F401
 
-# tree_sitter is throwing a FutureWarning
+# tree_sitter está emitindo um FutureWarning
 warnings.simplefilter("ignore", category=FutureWarning)
 
 
@@ -56,13 +56,13 @@ class Linter:
                 encoding=self.encoding,
             )
         except OSError as err:
-            print(f"Unable to execute lint command: {err}")
+            print(f"Não foi possível executar o comando de lint: {err}")
             return
         errors = stdout
         if returncode == 0:
-            return  # zero exit status
+            return  # código de saída zero
 
-        res = f"## Running: {cmd}\n\n"
+        res = f"## Executando: {cmd}\n\n"
         res += errors
 
         return self.errors_to_lint_result(rel_fname, res)
@@ -84,7 +84,7 @@ class Linter:
         try:
             code = Path(fname).read_text(encoding=self.encoding, errors="replace")
         except OSError as err:
-            print(f"Unable to read {fname}: {err}")
+            print(f"Não foi possível ler {fname}: {err}")
             return
 
         if cmd:
@@ -108,7 +108,7 @@ class Linter:
         if not lintres:
             return
 
-        res = "# Fix any errors below, if possible.\n\n"
+        res = "# Corrija os erros abaixo, se possível.\n\n"
         res += lintres.text
         res += "\n"
         res += tree_context(rel_fname, code, lintres.lines)
@@ -145,7 +145,7 @@ class Linter:
             rel_fname,
         ]
 
-        text = f"## Running: {' '.join(flake8_cmd)}\n\n"
+        text = f"## Executando: {' '.join(flake8_cmd)}\n\n"
 
         try:
             result = subprocess.run(
@@ -159,7 +159,7 @@ class Linter:
             )
             errors = result.stdout + result.stderr
         except Exception as e:
-            errors = f"Error running flake8: {str(e)}"
+            errors = f"Erro ao executar o flake8: {str(e)}"
 
         if not errors:
             return
@@ -200,21 +200,21 @@ def lint_python_compile(fname, code):
 
 def basic_lint(fname, code):
     """
-    Use tree-sitter to look for syntax errors, display them with tree context.
+    Usa o tree-sitter para procurar erros de sintaxe e exibi-los com o contexto da árvore.
     """
 
     lang = filename_to_lang(fname)
     if not lang:
         return
 
-    # Tree-sitter linter is not capable of working with typescript #1132
+    # O linter do Tree-sitter não consegue trabalhar com TypeScript #1132
     if lang == "typescript":
         return
 
     try:
         parser = get_parser(lang)
     except Exception as err:
-        print(f"Unable to load parser: {err}")
+        print(f"Não foi possível carregar o parser: {err}")
         return
 
     tree = parser.parse(bytes(code, "utf-8"))
@@ -222,7 +222,7 @@ def basic_lint(fname, code):
     try:
         errors = traverse_tree(tree.root_node)
     except RecursionError:
-        print(f"Unable to lint {fname} due to RecursionError")
+        print(f"Não foi possível executar o lint em {fname} devido a um RecursionError")
         return
 
     if not errors:
@@ -248,15 +248,15 @@ def tree_context(fname, code, line_nums):
     line_nums = set(line_nums)
     context.add_lines_of_interest(line_nums)
     context.add_context()
-    s = "s" if len(line_nums) > 1 else ""
-    output = f"## See relevant line{s} below marked with █.\n\n"
+    plural = "s" if len(line_nums) > 1 else ""
+    output = f"## Veja abaixo a{plural} linha{plural} relevante{plural} marcada{plural} com █.\n\n"
     output += fname + ":\n"
     output += context.format()
 
     return output
 
 
-# Traverse the tree to find errors
+# Percorre a árvore para encontrar erros
 def traverse_tree(node):
     errors = []
     if node.type == "ERROR" or node.is_missing:
@@ -271,8 +271,8 @@ def traverse_tree(node):
 
 def find_filenames_and_linenums(text, fnames):
     """
-    Search text for all occurrences of <filename>:\\d+ and make a list of them
-    where <filename> is one of the filenames in the list `fnames`.
+    Procura no texto todas as ocorrências de <nome_do_arquivo>:\\d+ e cria uma lista delas,
+    em que <nome_do_arquivo> é um dos nomes presentes na lista `fnames`.
     """
     pattern = re.compile(r"(\b(?:" + "|".join(re.escape(fname) for fname in fnames) + r"):\d+\b)")
     matches = pattern.findall(text)
@@ -287,10 +287,10 @@ def find_filenames_and_linenums(text, fnames):
 
 def main():
     """
-    Main function to parse files provided as command line arguments.
+    Função principal para processar arquivos fornecidos como argumentos da linha de comando.
     """
     if len(sys.argv) < 2:
-        print("Usage: python linter.py <file1> <file2> ...")
+        print("Uso: python linter.py <arquivo1> <arquivo2> ...")
         sys.exit(1)
 
     linter = Linter(root=os.getcwd())
