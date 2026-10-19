@@ -13,47 +13,47 @@ from aider.watch_prompts import watch_ask_prompt, watch_code_prompt
 
 
 def load_gitignores(gitignore_paths: list[Path]) -> Optional[PathSpec]:
-    """Load and parse multiple .gitignore files into a single PathSpec"""
+    """Carrega e processa vários arquivos .gitignore em um único PathSpec"""
     if not gitignore_paths:
         return None
 
     patterns = [
         ".aider*",
         ".git",
-        # Common editor backup/temp files
-        "*~",  # Emacs/vim backup
-        "*.bak",  # Generic backup
-        "*.swp",  # Vim swap
-        "*.swo",  # Vim swap
-        "\\#*\\#",  # Emacs auto-save
-        ".#*",  # Emacs lock files
-        "*.tmp",  # Generic temp files
-        "*.temp",  # Generic temp files
-        "*.orig",  # Merge conflict originals
-        "*.pyc",  # Python bytecode
-        "__pycache__/",  # Python cache dir
-        ".DS_Store",  # macOS metadata
-        "Thumbs.db",  # Windows thumbnail cache
+        # Arquivos comuns de backup/temporários de editores
+        "*~",  # Backup do Emacs/vim
+        "*.bak",  # Backup genérico
+        "*.swp",  # Swap do Vim
+        "*.swo",  # Swap do Vim
+        "\\#*\\#",  # Salvamento automático do Emacs
+        ".#*",  # Arquivos de bloqueio do Emacs
+        "*.tmp",  # Arquivos temporários genéricos
+        "*.temp",  # Arquivos temporários genéricos
+        "*.orig",  # Originais de conflitos de merge
+        "*.pyc",  # Bytecode do Python
+        "__pycache__/",  # Diretório de cache do Python
+        ".DS_Store",  # Metadados do macOS
+        "Thumbs.db",  # Cache de miniaturas do Windows
         "*.svg",
         "*.pdf",
-        # IDE files
-        ".idea/",  # JetBrains IDEs
+        # Arquivos de IDE
+        ".idea/",  # IDEs JetBrains
         ".vscode/",  # VS Code
         "*.sublime-*",  # Sublime Text
         ".project",  # Eclipse
         ".settings/",  # Eclipse
-        "*.code-workspace",  # VS Code workspace
-        # Environment files
-        ".env",  # Environment variables
-        ".venv/",  # Python virtual environments
-        "node_modules/",  # Node.js dependencies
-        "vendor/",  # Various dependencies
-        # Logs and caches
-        "*.log",  # Log files
-        ".cache/",  # Cache directories
-        ".pytest_cache/",  # Python test cache
-        "coverage/",  # Code coverage reports
-    ]  # Always ignore
+        "*.code-workspace",  # Workspace do VS Code
+        # Arquivos de ambiente
+        ".env",  # Variáveis de ambiente
+        ".venv/",  # Ambientes virtuais Python
+        "node_modules/",  # Dependências do Node.js
+        "vendor/",  # Dependências diversas
+        # Logs e caches
+        "*.log",  # Arquivos de log
+        ".cache/",  # Diretórios de cache
+        ".pytest_cache/",  # Cache de testes do Python
+        "coverage/",  # Relatórios de cobertura de código
+    ]  # Sempre ignorar
     for path in gitignore_paths:
         if path.exists():
             with open(path) as f:
@@ -63,9 +63,9 @@ def load_gitignores(gitignore_paths: list[Path]) -> Optional[PathSpec]:
 
 
 class FileWatcher:
-    """Watches source files for changes and AI comments"""
+    """Monitora arquivos-fonte em busca de alterações e comentários de IA"""
 
-    # Compiled regex pattern for AI comments
+    # Padrão regex compilado para comentários de IA
     ai_comment_pattern = re.compile(
         r"(?:#|//|--|;+) *(ai\b.*|ai\b.*|.*\bai[?!]?) *$", re.IGNORECASE
     )
@@ -88,7 +88,7 @@ class FileWatcher:
         coder.io.file_watcher = self
 
     def filter_func(self, change_type, path):
-        """Filter function for the file watcher"""
+        """Função de filtro para o monitor de arquivos"""
         path_obj = Path(path)
         path_abs = path_obj.absolute()
 
@@ -97,21 +97,21 @@ class FileWatcher:
 
         rel_path = path_abs.relative_to(self.root)
         if self.verbose:
-            print("Changed", rel_path)
+            print("Alterado", rel_path)
 
         if self.gitignore_spec and self.gitignore_spec.match_file(
             rel_path.as_posix() + ("/" if path_abs.is_dir() else "")
         ):
             return False
 
-        # Check file size before reading content
-        if path_abs.is_file() and path_abs.stat().st_size > 1 * 1024 * 1024:  # 1MB limit
+        # Verifica o tamanho do arquivo antes de ler o conteúdo
+        if path_abs.is_file() and path_abs.stat().st_size > 1 * 1024 * 1024:  # limite de 1 MB
             return False
 
         if self.verbose:
-            print("Checking", rel_path)
+            print("Verificando", rel_path)
 
-        # Check if file contains AI markers
+        # Verifica se o arquivo contém marcadores de IA
         try:
             comments, _, _ = self.get_ai_comments(str(path_abs))
             return bool(comments)
@@ -119,7 +119,7 @@ class FileWatcher:
             return
 
     def get_roots_to_watch(self):
-        """Determine which root paths to watch based on gitignore rules"""
+        """Determina quais caminhos raiz monitorar com base nas regras do gitignore"""
         if self.gitignore_spec:
             roots = [
                 str(path)
@@ -128,12 +128,12 @@ class FileWatcher:
                     path.relative_to(self.root).as_posix() + ("/" if path.is_dir() else "")
                 )
             ]
-            # Fallback to watching root if all top-level items are filtered out
+            # Se todos os itens de nível superior forem filtrados, monitora a raiz
             return roots if roots else [str(self.root)]
         return [str(self.root)]
 
     def handle_changes(self, changes):
-        """Process the detected changes and update state"""
+        """Processa as alterações detectadas e atualiza o estado"""
         if not changes:
             return False
 
@@ -143,7 +143,7 @@ class FileWatcher:
         return True
 
     def watch_files(self):
-        """Watch for file changes and process them"""
+        """Monitora alterações em arquivos e as processa"""
         try:
             roots_to_watch = self.get_roots_to_watch()
 
@@ -158,11 +158,11 @@ class FileWatcher:
 
         except Exception as e:
             if self.verbose:
-                dump(f"File watcher error: {e}")
+                dump(f"Erro no monitor de arquivos: {e}")
             raise e
 
     def start(self):
-        """Start watching for file changes"""
+        """Inicia o monitoramento de alterações em arquivos"""
         self.stop_event = threading.Event()
         self.changed_files = set()
 
@@ -170,7 +170,7 @@ class FileWatcher:
         self.watcher_thread.start()
 
     def stop(self):
-        """Stop watching for file changes"""
+        """Interrompe o monitoramento de alterações em arquivos"""
         if self.stop_event:
             self.stop_event.set()
         if self.watcher_thread:
@@ -179,7 +179,7 @@ class FileWatcher:
             self.stop_event = None
 
     def process_changes(self):
-        """Get any detected file changes"""
+        """Obtém quaisquer alterações de arquivo detectadas"""
 
         has_action = None
         added = False
@@ -197,25 +197,25 @@ class FileWatcher:
             if not added:
                 self.io.tool_output()
                 added = True
-            self.io.tool_output(f"Added {rel_fname} to the chat")
+            self.io.tool_output(f"Adicionado {rel_fname} ao chat")
 
         if not has_action:
             if added:
                 self.io.tool_output(
-                    "End your comment with AI! to request changes or AI? to ask questions"
+                    "Termine seu comentário com AI! para solicitar alterações ou AI? para fazer perguntas"
                 )
             return ""
 
         if self.analytics:
             self.analytics.event("ai-comments execute")
-        self.io.tool_output("Processing your request...")
+        self.io.tool_output("Processando sua solicitação...")
 
         if has_action == "!":
             res = watch_code_prompt
         elif has_action == "?":
             res = watch_ask_prompt
 
-        # Refresh all AI comments from tracked files
+        # Atualiza todos os comentários de IA dos arquivos rastreados
         for fname in self.coder.abs_fnames:
             line_nums, comments, _action = self.get_ai_comments(fname)
             if not line_nums:
@@ -228,7 +228,7 @@ class FileWatcher:
             rel_fname = self.coder.get_rel_fname(fname)
             res += f"\n{rel_fname}:\n"
 
-            # Convert comment line numbers to line indices (0-based)
+            # Converte números de linha dos comentários em índices de linha (base 0)
             lois = [ln - 1 for ln, _ in zip(line_nums, comments) if ln > 0]
 
             try:
@@ -250,15 +250,15 @@ class FileWatcher:
                 res += context.format()
             except ValueError:
                 for ln, comment in zip(line_nums, comments):
-                    res += f"  Line {ln}: {comment}\n"
+                    res += f"  Linha {ln}: {comment}\n"
 
         return res
 
     def get_ai_comments(self, filepath):
-        """Extract AI comment line numbers, comments and action status from a file"""
+        """Extrai números de linha, comentários de IA e o estado da ação de um arquivo"""
         line_nums = []
         comments = []
-        has_action = None  # None, "!" or "?"
+        has_action = None  # None, "!" ou "?"
         content = self.io.read_text(filepath, silent=True)
         if not content:
             return None, None, None
@@ -270,7 +270,7 @@ class FileWatcher:
                     line_nums.append(i)
                     comments.append(comment)
                     comment = comment.lower()
-                    comment = comment.lstrip("/#-;")  # Added semicolon for Lisp comments
+                    comment = comment.lstrip("/#-;")  # Adicionado ponto e vírgula para comentários Lisp
                     comment = comment.strip()
                     if comment.startswith("ai!") or comment.endswith("ai!"):
                         has_action = "!"
@@ -282,22 +282,22 @@ class FileWatcher:
 
 
 def main():
-    """Example usage of the file watcher"""
+    """Exemplo de uso do monitor de arquivos"""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Watch source files for changes")
-    parser.add_argument("directory", help="Directory to watch")
+    parser = argparse.ArgumentParser(description="Monitora arquivos-fonte em busca de alterações")
+    parser.add_argument("directory", help="Diretório a monitorar")
     parser.add_argument(
         "--gitignore",
         action="append",
-        help="Path to .gitignore file (can be specified multiple times)",
+        help="Caminho para o arquivo .gitignore (pode ser especificado várias vezes)",
     )
     args = parser.parse_args()
 
     directory = args.directory
-    print(f"Watching source files in {directory}...")
+    print(f"Monitorando arquivos-fonte em {directory}...")
 
-    # Example ignore function that ignores files with "test" in the name
+    # Exemplo de função que ignora arquivos com "test" no nome
     def ignore_test_files(path):
         return "test" in path.name.lower()
 
@@ -310,7 +310,7 @@ def main():
                     print(file)
                 watcher.changed_files = None
     except KeyboardInterrupt:
-        print("\nStopped watching files")
+        print("\nMonitoramento de arquivos interrompido")
         watcher.stop()
 
 
