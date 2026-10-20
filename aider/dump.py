@@ -16,7 +16,7 @@ def dump(*vals):
     stack = traceback.extract_stack()
     vars = stack[-2][3]
 
-    # strip away the call to dump()
+    # remove a chamada a dump()
     vars = "(".join(vars.split("(")[1:])
     vars = ")".join(vars.split(")")[:-1])
 
