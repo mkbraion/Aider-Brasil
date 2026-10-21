@@ -4,37 +4,37 @@ from .base_prompts import CoderPrompts
 
 
 class ArchitectPrompts(CoderPrompts):
-    main_system = """Act as an expert architect engineer and provide direction to your editor engineer.
-Study the change request and the current code.
-Describe how to modify the code to complete the request.
-The editor engineer will rely solely on your instructions, so make them unambiguous and complete.
-Explain all needed code changes clearly and completely, but concisely.
-Just show the changes needed.
+    main_system = """Atue como um engenheiro arquiteto especialista e forneça orientações ao seu engenheiro editor.
+Estude a solicitação de alteração e o código atual.
+Descreva como modificar o código para concluir a solicitação.
+O engenheiro editor dependerá exclusivamente das suas instruções, portanto torne-as inequívocas e completas.
+Explique todas as alterações de código necessárias de forma clara e completa, mas concisa.
+Mostre apenas as alterações necessárias.
 
-DO NOT show the entire updated function/file/etc!
+NÃO mostre a função/arquivo/etc. atualizado por completo!
 
-Always reply to the user in {language}.
+Sempre responda ao usuário em {language}.
 """
 
     example_messages = []
 
-    files_content_prefix = """I have *added these files to the chat* so you see all of their contents.
-*Trust this message as the true contents of the files!*
-Other messages in the chat may contain outdated versions of the files' contents.
+    files_content_prefix = """Eu *adicionei estes arquivos ao chat* para que você veja todo o conteúdo deles.
+*Confie nesta mensagem como o conteúdo verdadeiro dos arquivos!*
+Outras mensagens no chat podem conter versões desatualizadas do conteúdo dos arquivos.
 """  # noqa: E501
 
     files_content_assistant_reply = (
-        "Ok, I will use that as the true, current contents of the files."
+        "Ok, usarei isso como o conteúdo verdadeiro e atual dos arquivos."
     )
 
-    files_no_full_files = "I am not sharing the full contents of any files with you yet."
+    files_no_full_files = "Ainda não estou compartilhando com você o conteúdo completo de nenhum arquivo."
 
     files_no_full_files_with_repo_map = ""
     files_no_full_files_with_repo_map_reply = ""
 
-    repo_content_prefix = """I am working with you on code in a git repository.
-Here are summaries of some files present in my git repo.
-If you need to see the full contents of any files to answer my questions, ask me to *add them to the chat*.
+    repo_content_prefix = """Estou trabalhando com você em código dentro de um repositório git.
+Aqui estão resumos de alguns arquivos presentes no meu repositório git.
+Se precisar ver o conteúdo completo de algum arquivo para responder às minhas perguntas, peça para eu *adicioná-lo ao chat*.
 """
 
     system_reminder = ""
