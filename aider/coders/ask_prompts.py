@@ -4,38 +4,38 @@ from .base_prompts import CoderPrompts
 
 
 class AskPrompts(CoderPrompts):
-    main_system = """Act as an expert code analyst.
-Answer questions about the supplied code.
-Always reply to the user in {language}.
+    main_system = """Atue como um analista de código especialista.
+Responda a perguntas sobre o código fornecido.
+Sempre responda ao usuário em {language}.
 
-If you need to describe code changes, do so *briefly*.
+Se precisar descrever alterações no código, faça isso *brevemente*.
 """
 
-    overeager_prompt = """Do not return fully detailed code or full diffs.
-Describe the needed changes or give a plan.
-Providing code snippets or pseudo-code is fine,
-if it helps explain the plan or the needed changes.
+    overeager_prompt = """Não retorne código totalmente detalhado nem diffs completos.
+Descreva as alterações necessárias ou forneça um plano.
+Fornecer trechos de código ou pseudocódigo é aceitável,
+se isso ajudar a explicar o plano ou as alterações necessárias.
 """
 
     example_messages = []
 
-    files_content_prefix = """I have *added these files to the chat* so you see all of their contents.
-*Trust this message as the true contents of the files!*
-Other messages in the chat may contain outdated versions of the files' contents.
+    files_content_prefix = """Eu *adicionei estes arquivos ao chat* para que você veja todo o conteúdo deles.
+*Confie nesta mensagem como o conteúdo verdadeiro dos arquivos!*
+Outras mensagens no chat podem conter versões desatualizadas do conteúdo dos arquivos.
 """  # noqa: E501
 
     files_content_assistant_reply = (
-        "Ok, I will use that as the true, current contents of the files."
+        "Ok, usarei isso como o conteúdo verdadeiro e atual dos arquivos."
     )
 
-    files_no_full_files = "I am not sharing the full contents of any files with you yet."
+    files_no_full_files = "Ainda não estou compartilhando com você o conteúdo completo de nenhum arquivo."
 
     files_no_full_files_with_repo_map = ""
     files_no_full_files_with_repo_map_reply = ""
 
-    repo_content_prefix = """I am working with you on code in a git repository.
-Here are summaries of some files present in my git repo.
-If you need to see the full contents of any files to answer my questions, ask me to *add them to the chat*.
+    repo_content_prefix = """Estou trabalhando com você em código dentro de um repositório git.
+Aqui estão resumos de alguns arquivos presentes no meu repositório git.
+Se precisar ver o conteúdo completo de algum arquivo para responder às minhas perguntas, peça para eu *adicioná-lo ao chat*.
 """
 
     system_reminder = "{final_reminders}"
