@@ -1,54 +1,54 @@
 class CoderPrompts:
     system_reminder = ""
 
-    files_content_gpt_edits = "I committed the changes with git hash {hash} & commit msg: {message}"
+    files_content_gpt_edits = "Confirmei as alterações com o hash git {hash} e a mensagem de commit: {message}"
 
-    files_content_gpt_edits_no_repo = "I updated the files."
+    files_content_gpt_edits_no_repo = "Atualizei os arquivos."
 
-    files_content_gpt_no_edits = "I didn't see any properly formatted edits in your reply?!"
+    files_content_gpt_no_edits = "Não encontrei nenhuma edição formatada corretamente na sua resposta?!"
 
-    files_content_local_edits = "I edited the files myself."
+    files_content_local_edits = "Eu mesmo editei os arquivos."
 
-    lazy_prompt = """You are diligent and tireless!
-You NEVER leave comments describing code without implementing it!
-You always COMPLETELY IMPLEMENT the needed code!
+    lazy_prompt = """Você é diligente e incansável!
+Você NUNCA deixa comentários descrevendo código sem implementá-lo!
+Você sempre IMPLEMENTA COMPLETAMENTE o código necessário!
 """
 
-    overeager_prompt = """Pay careful attention to the scope of the user's request.
-Do what they ask, but no more.
-Do not improve, comment, fix or modify unrelated parts of the code in any way!
+    overeager_prompt = """Preste muita atenção ao escopo da solicitação do usuário.
+Faça o que ele pedir, mas nada além disso.
+Não melhore, comente, corrija ou modifique de forma alguma partes não relacionadas do código!
 """
 
     example_messages = []
 
-    files_content_prefix = """I have *added these files to the chat* so you can go ahead and edit them.
+    files_content_prefix = """Eu *adicionei estes arquivos ao chat* para que você possa editá-los.
 
-*Trust this message as the true contents of these files!*
-Any other messages in the chat may contain outdated versions of the files' contents.
+*Considere esta mensagem como o conteúdo verdadeiro destes arquivos!*
+Outras mensagens no chat podem conter versões desatualizadas do conteúdo dos arquivos.
 """  # noqa: E501
 
-    files_content_assistant_reply = "Ok, any changes I propose will be to those files."
+    files_content_assistant_reply = "Certo, qualquer alteração que eu propuser será nesses arquivos."
 
-    files_no_full_files = "I am not sharing any files that you can edit yet."
+    files_no_full_files = "Ainda não estou compartilhando nenhum arquivo que você possa editar."
 
-    files_no_full_files_with_repo_map = """Don't try and edit any existing code without asking me to add the files to the chat!
-Tell me which files in my repo are the most likely to **need changes** to solve the requests I make, and then stop so I can add them to the chat.
-Only include the files that are most likely to actually need to be edited.
-Don't include files that might contain relevant context, just files that will need to be changed.
+    files_no_full_files_with_repo_map = """Não tente editar nenhum código existente sem me pedir para adicionar os arquivos ao chat!
+Diga quais arquivos do meu repositório têm maior probabilidade de **precisar de alterações** para resolver as solicitações que eu fizer e então pare para que eu possa adicioná-los ao chat.
+Inclua apenas os arquivos que realmente têm maior probabilidade de precisar ser editados.
+Não inclua arquivos que possam apenas conter contexto relevante; inclua somente arquivos que precisarão ser alterados.
 """  # noqa: E501
 
     files_no_full_files_with_repo_map_reply = (
-        "Ok, based on your requests I will suggest which files need to be edited and then"
-        " stop and wait for your approval."
+        "Certo, com base nas suas solicitações, vou sugerir quais arquivos precisam ser editados e então"
+        " vou parar e aguardar sua aprovação."
     )
 
-    repo_content_prefix = """Here are summaries of some files present in my git repository.
-Do not propose changes to these files, treat them as *read-only*.
-If you need to edit any of these files, ask me to *add them to the chat* first.
+    repo_content_prefix = """Aqui estão resumos de alguns arquivos presentes no meu repositório git.
+Não proponha alterações nesses arquivos; trate-os como *somente leitura*.
+Se precisar editar algum desses arquivos, peça primeiro para eu *adicioná-lo ao chat*.
 """
 
-    read_only_files_prefix = """Here are some READ ONLY files, provided for your reference.
-Do not edit these files!
+    read_only_files_prefix = """Aqui estão alguns arquivos SOMENTE LEITURA, fornecidos para sua referência.
+Não edite estes arquivos!
 """
 
     shell_cmd_prompt = ""
