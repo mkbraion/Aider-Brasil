@@ -34,15 +34,15 @@ def default_env_file(git_root):
 
 def get_parser(default_config_files, git_root):
     parser = configargparse.ArgumentParser(
-        description="aider is AI pair programming in your terminal",
+        description="aider é seu assistente de programação com IA no terminal",
         add_config_file_help=True,
         default_config_files=default_config_files,
         config_file_parser_class=configargparse.YAMLConfigFileParser,
         auto_env_var_prefix="AIDER_",
     )
-    # List of valid edit formats for argparse validation & shtab completion.
-    # Dynamically gather them from the registered coder classes so the list
-    # stays in sync if new formats are added.
+    # Formatos de edição válidos para validação do argparse e autocompletar do shtab.
+    # Obtém os formatos dinamicamente das classes de codificação registradas, para que
+    # a lista continue atualizada quando novos formatos forem adicionados.
     from aider import coders as _aider_coders
 
     edit_format_choices = sorted(
@@ -52,52 +52,52 @@ def get_parser(default_config_files, git_root):
             if hasattr(c, "edit_format") and c.edit_format is not None
         }
     )
-    group = parser.add_argument_group("Main model")
+    group = parser.add_argument_group("Modelo principal")
     group.add_argument(
-        "files", metavar="FILE", nargs="*", help="files to edit with an LLM (optional)"
+        "files", metavar="FILE", nargs="*", help="Arquivos para editar com um modelo de linguagem (opcional)"
     ).complete = shtab.FILE
     group.add_argument(
         "--model",
         metavar="MODEL",
         default=None,
-        help="Specify the model to use for the main chat",
+        help="Especifica o modelo usado na conversa principal",
     )
 
     ##########
-    group = parser.add_argument_group("API Keys and settings")
+    group = parser.add_argument_group("Chaves de API e configurações")
     group.add_argument(
         "--openai-api-key",
-        help="Specify the OpenAI API key",
+        help="Especifica a chave de API da OpenAI",
     )
     group.add_argument(
         "--anthropic-api-key",
-        help="Specify the Anthropic API key",
+        help="Especifica a chave de API da Anthropic",
     )
     group.add_argument(
         "--openai-api-base",
-        help="Specify the api base url",
+        help="Especifica a URL base da API",
     )
     group.add_argument(
         "--openai-api-type",
-        help="(deprecated, use --set-env OPENAI_API_TYPE=<value>)",
+        help="(obsoleto, use --set-env OPENAI_API_TYPE=<value>)",
     )
     group.add_argument(
         "--openai-api-version",
-        help="(deprecated, use --set-env OPENAI_API_VERSION=<value>)",
+        help="(obsoleto, use --set-env OPENAI_API_VERSION=<value>)",
     )
     group.add_argument(
         "--openai-api-deployment-id",
-        help="(deprecated, use --set-env OPENAI_API_DEPLOYMENT_ID=<value>)",
+        help="(obsoleto, use --set-env OPENAI_API_DEPLOYMENT_ID=<value>)",
     )
     group.add_argument(
         "--openai-organization-id",
-        help="(deprecated, use --set-env OPENAI_ORGANIZATION=<value>)",
+        help="(obsoleto, use --set-env OPENAI_ORGANIZATION=<value>)",
     )
     group.add_argument(
         "--set-env",
         action="append",
         metavar="ENV_VAR_NAME=value",
-        help="Set an environment variable (to control API settings, can be used multiple times)",
+        help="Define uma variável de ambiente (para configurar APIs; pode ser usado várias vezes)",
         default=[],
     )
     group.add_argument(
@@ -105,60 +105,60 @@ def get_parser(default_config_files, git_root):
         action="append",
         metavar="PROVIDER=KEY",
         help=(
-            "Set an API key for a provider (eg: --api-key provider=<key> sets"
+            "Define uma chave de API para um provedor (ex.: --api-key provider=<key> define"
             " PROVIDER_API_KEY=<key>)"
         ),
         default=[],
     )
-    group = parser.add_argument_group("Model settings")
+    group = parser.add_argument_group("Configurações de modelos")
     group.add_argument(
         "--list-models",
         "--models",
         metavar="MODEL",
-        help="List known models which match the (partial) MODEL name",
+        help="Lista modelos conhecidos cujo nome corresponde a MODEL (mesmo parcialmente)",
     )
     group.add_argument(
         "--model-settings-file",
         metavar="MODEL_SETTINGS_FILE",
         default=".aider.model.settings.yml",
-        help="Specify a file with aider model settings for unknown models",
+        help="Especifica um arquivo de configurações do aider para modelos desconhecidos",
     ).complete = shtab.FILE
     group.add_argument(
         "--model-metadata-file",
         metavar="MODEL_METADATA_FILE",
         default=".aider.model.metadata.json",
-        help="Specify a file with context window and costs for unknown models",
+        help="Especifica um arquivo com janela de contexto e custos de modelos desconhecidos",
     ).complete = shtab.FILE
     group.add_argument(
         "--alias",
         action="append",
         metavar="ALIAS:MODEL",
-        help="Add a model alias (can be used multiple times)",
+        help="Adiciona um apelido de modelo (pode ser usado várias vezes)",
     )
     group.add_argument(
         "--reasoning-effort",
         type=str,
-        help="Set the reasoning_effort API parameter (default: not set)",
+        help="Define o parâmetro de API reasoning_effort (padrão: não definido)",
     )
     group.add_argument(
         "--thinking-tokens",
         type=str,
         help=(
-            "Set the thinking token budget for models that support it. Use 0 to disable. (default:"
-            " not set)"
+            "Define o limite de tokens de raciocínio para modelos compatíveis. Use 0 para desativar. (padrão:"
+            " não definido)"
         ),
     )
     group.add_argument(
         "--verify-ssl",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Verify the SSL cert when connecting to models (default: True)",
+        help="Verifica o certificado SSL ao conectar aos modelos (padrão: True)",
     )
     group.add_argument(
         "--timeout",
         type=float,
         default=None,
-        help="Timeout in seconds for API calls (default: None)",
+        help="Tempo limite em segundos para chamadas de API (padrão: None)",
     )
     group.add_argument(
         "--edit-format",
@@ -166,55 +166,55 @@ def get_parser(default_config_files, git_root):
         metavar="EDIT_FORMAT",
         choices=edit_format_choices,
         default=None,
-        help="Specify what edit format the LLM should use (default depends on model)",
+        help="Especifica o formato de edição usado pelo modelo (padrão: depende do modelo)",
     )
     group.add_argument(
         "--architect",
         action="store_const",
         dest="edit_format",
         const="architect",
-        help="Use architect edit format for the main chat",
+        help="Usa o formato de edição arquiteto na conversa principal",
     )
     group.add_argument(
         "--auto-accept-architect",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable automatic acceptance of architect changes (default: True)",
+        help="Ativa/desativa a aceitação automática de alterações do arquiteto (padrão: True)",
     )
     group.add_argument(
         "--weak-model",
         metavar="WEAK_MODEL",
         default=None,
         help=(
-            "Specify the model to use for commit messages and chat history summarization (default"
-            " depends on --model)"
+            "Especifica o modelo para mensagens de commit e resumos do histórico da conversa (padrão"
+            " depende de --model)"
         ),
     )
     group.add_argument(
         "--editor-model",
         metavar="EDITOR_MODEL",
         default=None,
-        help="Specify the model to use for editor tasks (default depends on --model)",
+        help="Especifica o modelo para tarefas de edição (padrão: depende de --model)",
     )
     group.add_argument(
         "--editor-edit-format",
         metavar="EDITOR_EDIT_FORMAT",
         choices=edit_format_choices,
         default=None,
-        help="Specify the edit format for the editor model (default: depends on editor model)",
+        help="Especifica o formato de edição do modelo editor (padrão: depende do modelo editor)",
     )
     group.add_argument(
         "--show-model-warnings",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Only work with models that have meta-data available (default: True)",
+        help="Trabalha apenas com modelos que possuem metadados disponíveis (padrão: True)",
     )
     group.add_argument(
         "--check-model-accepts-settings",
         action=argparse.BooleanOptionalAction,
         default=True,
         help=(
-            "Check if model accepts settings like reasoning_effort/thinking_tokens (default: True)"
+            "Verifica se o modelo aceita configurações como reasoning_effort/thinking_tokens (padrão: True)"
         ),
     )
     group.add_argument(
@@ -222,52 +222,52 @@ def get_parser(default_config_files, git_root):
         type=int,
         default=None,
         help=(
-            "Soft limit on tokens for chat history, after which summarization begins."
-            " If unspecified, defaults to the model's max_chat_history_tokens."
+            "Limite flexível de tokens do histórico da conversa, após o qual começa o resumo."
+            " Se não informado, usa max_chat_history_tokens do modelo como padrão."
         ),
     )
 
     ##########
-    group = parser.add_argument_group("Cache settings")
+    group = parser.add_argument_group("Configurações de cache")
     group.add_argument(
         "--cache-prompts",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable caching of prompts (default: False)",
+        help="Ativa o cache de prompts (padrão: False)",
     )
     group.add_argument(
         "--cache-keepalive-pings",
         type=int,
         default=0,
-        help="Number of times to ping at 5min intervals to keep prompt cache warm (default: 0)",
+        help="Número de pings em intervalos de 5 minutos para manter o cache de prompts ativo (padrão: 0)",
     )
 
     ##########
-    group = parser.add_argument_group("Repomap settings")
+    group = parser.add_argument_group("Configurações do mapa do repositório")
     group.add_argument(
         "--map-tokens",
         type=int,
         default=None,
-        help="Suggested number of tokens to use for repo map, use 0 to disable",
+        help="Quantidade sugerida de tokens para o mapa do repositório; use 0 para desativar",
     )
     group.add_argument(
         "--map-refresh",
         choices=["auto", "always", "files", "manual"],
         default="auto",
         help=(
-            "Control how often the repo map is refreshed. Options: auto, always, files, manual"
-            " (default: auto)"
+            "Controla a frequência de atualização do mapa do repositório. Opções: auto, always, files, manual"
+            " (padrão: auto)"
         ),
     )
     group.add_argument(
         "--map-multiplier-no-files",
         type=float,
         default=2,
-        help="Multiplier for map tokens when no files are specified (default: 2)",
+        help="Multiplicador de tokens do mapa quando nenhum arquivo é informado (padrão: 2)",
     )
 
     ##########
-    group = parser.add_argument_group("History Files")
+    group = parser.add_argument_group("Arquivos de histórico")
     default_input_history_file = (
         os.path.join(git_root, ".aider.input.history") if git_root else ".aider.input.history"
     )
@@ -278,25 +278,25 @@ def get_parser(default_config_files, git_root):
         "--input-history-file",
         metavar="INPUT_HISTORY_FILE",
         default=default_input_history_file,
-        help=f"Specify the chat input history file (default: {default_input_history_file})",
+        help=f"Especifica o arquivo do histórico de entradas da conversa (padrão: {default_input_history_file})",
     ).complete = shtab.FILE
     group.add_argument(
         "--chat-history-file",
         metavar="CHAT_HISTORY_FILE",
         default=default_chat_history_file,
-        help=f"Specify the chat history file (default: {default_chat_history_file})",
+        help=f"Especifica o arquivo do histórico da conversa (padrão: {default_chat_history_file})",
     ).complete = shtab.FILE
     group.add_argument(
         "--restore-chat-history",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Restore the previous chat history messages (default: False)",
+        help="Restaura as mensagens anteriores do histórico da conversa (padrão: False)",
     )
     group.add_argument(
         "--llm-history-file",
         metavar="LLM_HISTORY_FILE",
         default=None,
-        help="Log the conversation with the LLM to this file (for example, .aider.llm.history)",
+        help="Registra a conversa com o modelo neste arquivo (por exemplo, .aider.llm.history)",
     ).complete = shtab.FILE
 
     ##########
