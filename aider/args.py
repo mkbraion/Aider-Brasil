@@ -300,102 +300,93 @@ def get_parser(default_config_files, git_root):
     ).complete = shtab.FILE
 
     ##########
-    group = parser.add_argument_group("Output settings")
+    group = parser.add_argument_group("Configurações de saída")
     group.add_argument(
         "--dark-mode",
         action="store_true",
-        help="Use colors suitable for a dark terminal background (default: False)",
+        help="Usa cores adequadas a terminais com fundo escuro (padrão: False)",
         default=False,
     )
     group.add_argument(
         "--light-mode",
         action="store_true",
-        help="Use colors suitable for a light terminal background (default: False)",
+        help="Usa cores adequadas a terminais com fundo claro (padrão: False)",
         default=False,
     )
     group.add_argument(
         "--pretty",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable pretty, colorized output (default: True)",
+        help="Ativa/desativa a saída formatada e colorida (padrão: True)",
     )
     group.add_argument(
         "--stream",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable streaming responses (default: True)",
+        help="Ativa/desativa respostas transmitidas em tempo real (padrão: True)",
     )
     group.add_argument(
         "--user-input-color",
         default="#00cc00",
-        help="Set the color for user input (default: #00cc00)",
+        help="Define a cor da entrada do usuário (padrão: #00cc00)",
     )
     group.add_argument(
         "--tool-output-color",
         default=None,
-        help="Set the color for tool output (default: None)",
+        help="Define a cor da saída das ferramentas (padrão: None)",
     )
     group.add_argument(
         "--tool-error-color",
         default="#FF2222",
-        help="Set the color for tool error messages (default: #FF2222)",
+        help="Define a cor das mensagens de erro das ferramentas (padrão: #FF2222)",
     )
     group.add_argument(
         "--tool-warning-color",
         default="#FFA500",
-        help="Set the color for tool warning messages (default: #FFA500)",
+        help="Define a cor dos avisos das ferramentas (padrão: #FFA500)",
     )
     group.add_argument(
         "--assistant-output-color",
         default="#0088ff",
-        help="Set the color for assistant output (default: #0088ff)",
+        help="Define a cor das respostas do assistente (padrão: #0088ff)",
     )
     group.add_argument(
         "--completion-menu-color",
         metavar="COLOR",
         default=None,
-        help="Set the color for the completion menu (default: terminal's default text color)",
+        help="Define a cor do menu de autocompletar (padrão: cor do texto do terminal)",
     )
     group.add_argument(
         "--completion-menu-bg-color",
         metavar="COLOR",
         default=None,
-        help=(
-            "Set the background color for the completion menu (default: terminal's default"
-            " background color)"
-        ),
+        help="Define a cor de fundo do menu de autocompletar (padrão: cor de fundo do terminal)",
     )
     group.add_argument(
         "--completion-menu-current-color",
         metavar="COLOR",
         default=None,
-        help=(
-            "Set the color for the current item in the completion menu (default: terminal's default"
-            " background color)"
-        ),
+        help="Define a cor do item selecionado no menu de autocompletar (padrão: cor de fundo do terminal)",
     )
     group.add_argument(
         "--completion-menu-current-bg-color",
         metavar="COLOR",
         default=None,
-        help=(
-            "Set the background color for the current item in the completion menu (default:"
-            " terminal's default text color)"
-        ),
+        help="Define a cor de fundo do item selecionado no menu de autocompletar (padrão: cor do texto do terminal)",
     )
     group.add_argument(
         "--code-theme",
         default="default",
         help=(
-            "Set the markdown code theme (default: default, other options include monokai,"
-            " solarized-dark, solarized-light, or a Pygments builtin style,"
-            " see https://pygments.org/styles for available themes)"
+            "Define o tema do código Markdown (padrão: default; outras opções incluem monokai,"
+            " solarized-dark, solarized-light ou um estilo integrado do Pygments;"
+            " consulte https://pygments.org/styles para ver os temas disponíveis)"
         ),
     )
     group.add_argument(
         "--show-diffs",
         action="store_true",
-        help="Show diffs when committing changes (default: False)",
+        help="Exibe as diferenças ao criar commits (padrão: False)",
         default=False,
     )
 
