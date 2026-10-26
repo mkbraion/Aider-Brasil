@@ -391,24 +391,24 @@ def get_parser(default_config_files, git_root):
     )
 
     ##########
-    group = parser.add_argument_group("Git settings")
+    group = parser.add_argument_group("Configurações do Git")
     group.add_argument(
         "--git",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable looking for a git repo (default: True)",
+        help="Ativa/desativa a busca por um repositório Git (padrão: True)",
     )
     group.add_argument(
         "--gitignore",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable adding .aider* to .gitignore (default: True)",
+        help="Ativa/desativa a inclusão de .aider* no .gitignore (padrão: True)",
     )
     group.add_argument(
         "--add-gitignore-files",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable/disable the addition of files listed in .gitignore to Aider's editing scope.",
+        help="Ativa/desativa a inclusão de arquivos listados no .gitignore no escopo de edição do aider.",
     )
     default_aiderignore_file = (
         os.path.join(git_root, ".aiderignore") if git_root else ".aiderignore"
@@ -419,33 +419,33 @@ def get_parser(default_config_files, git_root):
         metavar="AIDERIGNORE",
         type=lambda path_str: resolve_aiderignore_path(path_str, git_root),
         default=default_aiderignore_file,
-        help="Specify the aider ignore file (default: .aiderignore in git root)",
+        help="Especifica o arquivo de exclusões do aider (padrão: .aiderignore na raiz do Git)",
     ).complete = shtab.FILE
     group.add_argument(
         "--subtree-only",
         action="store_true",
-        help="Only consider files in the current subtree of the git repository",
+        help="Considera apenas arquivos da subárvore atual do repositório Git",
         default=False,
     )
     group.add_argument(
         "--auto-commits",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable auto commit of LLM changes (default: True)",
+        help="Ativa/desativa commits automáticos das alterações do modelo (padrão: True)",
     )
     group.add_argument(
         "--dirty-commits",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable commits when repo is found dirty (default: True)",
+        help="Ativa/desativa commits quando o repositório possui alterações pendentes (padrão: True)",
     )
     group.add_argument(
         "--attribute-author",
         action=argparse.BooleanOptionalAction,
         default=None,
         help=(
-            "Attribute aider code changes in the git author name (default: True). If explicitly set"
-            " to True, overrides --attribute-co-authored-by precedence."
+            "Atribui alterações do aider ao nome do autor no Git (padrão: True). Se definido explicitamente"
+            " como True, tem prioridade sobre --attribute-co-authored-by."
         ),
     )
     group.add_argument(
@@ -453,80 +453,80 @@ def get_parser(default_config_files, git_root):
         action=argparse.BooleanOptionalAction,
         default=None,
         help=(
-            "Attribute aider commits in the git committer name (default: True). If explicitly set"
-            " to True, overrides --attribute-co-authored-by precedence for aider edits."
+            "Atribui commits do aider ao nome de quem realizou o commit no Git (padrão: True). Se definido explicitamente"
+            " como True, tem prioridade sobre --attribute-co-authored-by para alterações do aider."
         ),
     )
     group.add_argument(
         "--attribute-commit-message-author",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Prefix commit messages with 'aider: ' if aider authored the changes (default: False)",
+        help="Adiciona 'aider: ' ao início da mensagem de commit se o aider fez as alterações (padrão: False)",
     )
     group.add_argument(
         "--attribute-commit-message-committer",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Prefix all commit messages with 'aider: ' (default: False)",
+        help="Adiciona 'aider: ' ao início de todas as mensagens de commit (padrão: False)",
     )
     group.add_argument(
         "--attribute-co-authored-by",
         action=argparse.BooleanOptionalAction,
         default=True,
         help=(
-            "Attribute aider edits using the Co-authored-by trailer in the commit message"
-            " (default: True). If True, this takes precedence over default --attribute-author and"
-            " --attribute-committer behavior unless they are explicitly set to True."
+            "Atribui alterações do aider usando o rodapé Co-authored-by na mensagem de commit"
+            " (padrão: True). Quando True, tem prioridade sobre os padrões de --attribute-author e"
+            " --attribute-committer, a menos que sejam definidos explicitamente como True."
         ),
     )
     group.add_argument(
         "--git-commit-verify",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable/disable git pre-commit hooks with --no-verify (default: False)",
+        help="Ativa/desativa hooks de pré-commit do Git com --no-verify (padrão: False)",
     )
     group.add_argument(
         "--commit",
         action="store_true",
-        help="Commit all pending changes with a suitable commit message, then exit",
+        help="Cria um commit com todas as alterações pendentes e uma mensagem adequada, depois encerra",
         default=False,
     )
     group.add_argument(
         "--commit-prompt",
         metavar="PROMPT",
-        help="Specify a custom prompt for generating commit messages",
+        help="Especifica um prompt personalizado para gerar mensagens de commit",
     )
     group.add_argument(
         "--dry-run",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Perform a dry run without modifying files (default: False)",
+        help="Executa uma simulação sem modificar arquivos (padrão: False)",
     )
     group.add_argument(
         "--skip-sanity-check-repo",
         action="store_true",
-        help="Skip the sanity check for the git repository (default: False)",
+        help="Ignora a verificação de integridade do repositório Git (padrão: False)",
         default=False,
     )
     group.add_argument(
         "--watch-files",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable/disable watching files for ai coding comments (default: False)",
+        help="Ativa/desativa o monitoramento de arquivos para comentários de programação com IA (padrão: False)",
     )
-    group = parser.add_argument_group("Fixing and committing")
+    group = parser.add_argument_group("Correções e commits")
     group.add_argument(
         "--lint",
         action="store_true",
-        help="Lint and fix provided files, or dirty files if none provided",
+        help="Verifica e corrige os arquivos informados ou, na ausência deles, os arquivos modificados",
         default=False,
     )
     group.add_argument(
         "--lint-cmd",
         action="append",
         help=(
-            'Specify lint commands to run for different languages, eg: "python: flake8'
-            ' --select=..." (can be used multiple times)'
+            'Especifica comandos de lint para diferentes linguagens, ex.: "python: flake8'
+            ' --select=..." (pode ser usado várias vezes)'
         ),
         default=[],
     )
@@ -534,23 +534,23 @@ def get_parser(default_config_files, git_root):
         "--auto-lint",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable automatic linting after changes (default: True)",
+        help="Ativa/desativa a verificação automática de lint após alterações (padrão: True)",
     )
     group.add_argument(
         "--test-cmd",
-        help="Specify command to run tests",
+        help="Especifica o comando para executar os testes",
         default=[],
     )
     group.add_argument(
         "--auto-test",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable/disable automatic testing after changes (default: False)",
+        help="Ativa/desativa a execução automática de testes após alterações (padrão: False)",
     )
     group.add_argument(
         "--test",
         action="store_true",
-        help="Run tests, fix problems found and then exit",
+        help="Executa os testes, corrige os problemas encontrados e depois encerra",
         default=False,
     )
 
