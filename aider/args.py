@@ -555,84 +555,84 @@ def get_parser(default_config_files, git_root):
     )
 
     ##########
-    group = parser.add_argument_group("Analytics")
+    group = parser.add_argument_group("Análise de uso")
     group.add_argument(
         "--analytics",
         action=argparse.BooleanOptionalAction,
         default=None,
-        help="Enable/disable analytics for current session (default: random)",
+        help="Ativa/desativa a análise de uso nesta sessão (padrão: aleatório)",
     )
     group.add_argument(
         "--analytics-log",
         metavar="ANALYTICS_LOG_FILE",
-        help="Specify a file to log analytics events",
+        help="Especifica um arquivo para registrar eventos de análise de uso",
     ).complete = shtab.FILE
     group.add_argument(
         "--analytics-disable",
         action="store_true",
-        help="Permanently disable analytics",
+        help="Desativa permanentemente a análise de uso",
         default=False,
     )
     group.add_argument(
         "--analytics-posthog-host",
         metavar="ANALYTICS_POSTHOG_HOST",
-        help="Send analytics to custom PostHog instance",
+        help="Envia dados de análise de uso para uma instância personalizada do PostHog",
     )
     group.add_argument(
         "--analytics-posthog-project-api-key",
         metavar="ANALYTICS_POSTHOG_PROJECT_API_KEY",
-        help="Send analytics to custom PostHog project",
+        help="Envia dados de análise de uso para um projeto personalizado do PostHog",
     )
 
     #########
-    group = parser.add_argument_group("Upgrading")
+    group = parser.add_argument_group("Atualizações")
     group.add_argument(
         "--just-check-update",
         action="store_true",
-        help="Check for updates and return status in the exit code",
+        help="Verifica se há atualizações e informa o resultado no código de saída",
         default=False,
     )
     group.add_argument(
         "--check-update",
         action=argparse.BooleanOptionalAction,
-        help="Check for new aider versions on launch",
+        help="Verifica se há novas versões do aider ao iniciar",
         default=True,
     )
     group.add_argument(
         "--show-release-notes",
         action=argparse.BooleanOptionalAction,
-        help="Show release notes on first run of new version (default: None, ask user)",
+        help="Exibe as notas de versão na primeira execução da nova versão (padrão: None, perguntar ao usuário)",
         default=None,
     )
     group.add_argument(
         "--install-main-branch",
         action="store_true",
-        help="Install the latest version from the main branch",
+        help="Instala a versão mais recente da branch principal",
         default=False,
     )
     group.add_argument(
         "--upgrade",
         "--update",
         action="store_true",
-        help="Upgrade aider to the latest version from PyPI",
+        help="Atualiza o aider para a versão mais recente disponível no PyPI",
         default=False,
     )
     group.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",
-        help="Show the version number and exit",
+        help="Exibe o número da versão e encerra",
     )
 
     ##########
-    group = parser.add_argument_group("Modes")
+    group = parser.add_argument_group("Modos de execução")
     group.add_argument(
         "--message",
         "--msg",
         "-m",
         metavar="COMMAND",
         help=(
-            "Specify a single message to send the LLM, process reply then exit (disables chat mode)"
+            "Envia uma única mensagem ao modelo, processa a resposta e encerra (desativa o modo de chat)"
         ),
     )
     group.add_argument(
@@ -640,141 +640,141 @@ def get_parser(default_config_files, git_root):
         "-f",
         metavar="MESSAGE_FILE",
         help=(
-            "Specify a file containing the message to send the LLM, process reply, then exit"
-            " (disables chat mode)"
+            "Especifica um arquivo com a mensagem para o modelo, processa a resposta e encerra"
+            " (desativa o modo de chat)"
         ),
     ).complete = shtab.FILE
     group.add_argument(
         "--gui",
         "--browser",
         action=argparse.BooleanOptionalAction,
-        help="Run aider in your browser (default: False)",
+        help="Executa o aider no navegador (padrão: False)",
         default=False,
     )
     group.add_argument(
         "--copy-paste",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable automatic copy/paste of chat between aider and web UI (default: False)",
+        help="Ativa a cópia e colagem automáticas do chat entre o aider e a interface web (padrão: False)",
     )
     group.add_argument(
         "--apply",
         metavar="FILE",
-        help="Apply the changes from the given file instead of running the chat (debug)",
+        help="Aplica as alterações do arquivo informado em vez de iniciar o chat (depuração)",
     ).complete = shtab.FILE
     group.add_argument(
         "--apply-clipboard-edits",
         action="store_true",
-        help="Apply clipboard contents as edits using the main model's editor format",
+        help="Aplica o conteúdo da área de transferência como edições no formato do modelo principal",
         default=False,
     )
     group.add_argument(
         "--exit",
         action="store_true",
-        help="Do all startup activities then exit before accepting user input (debug)",
+        help="Executa as tarefas de inicialização e encerra antes de receber entradas do usuário (depuração)",
         default=False,
     )
     group.add_argument(
         "--show-repo-map",
         action="store_true",
-        help="Print the repo map and exit (debug)",
+        help="Exibe o mapa do repositório e encerra (depuração)",
         default=False,
     )
     group.add_argument(
         "--show-prompts",
         action="store_true",
-        help="Print the system prompts and exit (debug)",
+        help="Exibe os prompts de sistema e encerra (depuração)",
         default=False,
     )
 
     ##########
-    group = parser.add_argument_group("Voice settings")
+    group = parser.add_argument_group("Configurações de voz")
     group.add_argument(
         "--voice-format",
         metavar="VOICE_FORMAT",
         default="wav",
         choices=["wav", "mp3", "webm"],
-        help="Audio format for voice recording (default: wav). webm and mp3 require ffmpeg",
+        help="Formato de áudio para gravação de voz (padrão: wav). webm e mp3 exigem ffmpeg",
     )
     group.add_argument(
         "--voice-language",
         metavar="VOICE_LANGUAGE",
         default="en",
-        help="Specify the language for voice using ISO 639-1 code (default: auto)",
+        help="Especifica o idioma da voz pelo código ISO 639-1 (padrão: auto)",
     )
     group.add_argument(
         "--voice-input-device",
         metavar="VOICE_INPUT_DEVICE",
         default=None,
-        help="Specify the input device name for voice recording",
+        help="Especifica o nome do dispositivo de entrada para gravação de voz",
     )
 
     ######
-    group = parser.add_argument_group("Other settings")
+    group = parser.add_argument_group("Outras configurações")
     group.add_argument(
         "--disable-playwright",
         action="store_true",
-        help="Never prompt for or attempt to install Playwright for web scraping (default: False).",
+        help="Nunca solicita nem tenta instalar o Playwright para extração de dados da web (padrão: False).",
         default=False,
     )
     group.add_argument(
         "--file",
         action="append",
         metavar="FILE",
-        help="specify a file to edit (can be used multiple times)",
+        help="Especifica um arquivo para editar (pode ser usado várias vezes)",
     ).complete = shtab.FILE
     group.add_argument(
         "--read",
         action="append",
         metavar="FILE",
-        help="specify a read-only file (can be used multiple times)",
+        help="Especifica um arquivo somente leitura (pode ser usado várias vezes)",
     ).complete = shtab.FILE
     group.add_argument(
         "--vim",
         action="store_true",
-        help="Use VI editing mode in the terminal (default: False)",
+        help="Usa o modo de edição VI no terminal (padrão: False)",
         default=False,
     )
     group.add_argument(
         "--chat-language",
         metavar="CHAT_LANGUAGE",
         default=None,
-        help="Specify the language to use in the chat (default: None, uses system settings)",
+        help="Especifica o idioma usado no chat (padrão: None, usa as configurações do sistema)",
     )
     group.add_argument(
         "--commit-language",
         metavar="COMMIT_LANGUAGE",
         default=None,
-        help="Specify the language to use in the commit message (default: None, user language)",
+        help="Especifica o idioma das mensagens de commit (padrão: None, idioma do usuário)",
     )
     group.add_argument(
         "--yes-always",
         action="store_true",
-        help="Always say yes to every confirmation",
+        help="Responde sim automaticamente a todas as confirmações",
         default=None,
     )
     group.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        help="Enable verbose output",
+        help="Ativa a saída detalhada",
         default=False,
     )
     group.add_argument(
         "--load",
         metavar="LOAD_FILE",
-        help="Load and execute /commands from a file on launch",
+        help="Carrega e executa /commands de um arquivo ao iniciar",
     ).complete = shtab.FILE
     group.add_argument(
         "--encoding",
         default="utf-8",
-        help="Specify the encoding for input and output (default: utf-8)",
+        help="Especifica a codificação de entrada e saída (padrão: utf-8)",
     )
     group.add_argument(
         "--line-endings",
         choices=["platform", "lf", "crlf"],
         default="platform",
-        help="Line endings to use when writing files (default: platform)",
+        help="Define as terminações de linha ao gravar arquivos (padrão: platform)",
     )
     group.add_argument(
         "-c",
@@ -782,42 +782,42 @@ def get_parser(default_config_files, git_root):
         is_config_file=True,
         metavar="CONFIG_FILE",
         help=(
-            "Specify the config file (default: search for .aider.conf.yml in git root, cwd"
-            " or home directory)"
+            "Especifica o arquivo de configuração (padrão: procura .aider.conf.yml na raiz do Git, no diretório atual"
+            " ou na pasta pessoal)"
         ),
     ).complete = shtab.FILE
-    # This is a duplicate of the argument in the preparser and is a no-op by this time of
-    # argument parsing, but it's here so that the help is displayed as expected.
+    # Este argumento duplica o do pré-analisador e já não produz efeito nesta etapa
+    # da análise de argumentos; ele permanece para exibir a ajuda corretamente.
     group.add_argument(
         "--env-file",
         metavar="ENV_FILE",
         default=default_env_file(git_root),
-        help="Specify the .env file to load (default: .env in git root)",
+        help="Especifica o arquivo .env a carregar (padrão: .env na raiz do Git)",
     ).complete = shtab.FILE
     group.add_argument(
         "--suggest-shell-commands",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable suggesting shell commands (default: True)",
+        help="Ativa/desativa sugestões de comandos do shell (padrão: True)",
     )
     group.add_argument(
         "--fancy-input",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable fancy input with history and completion (default: True)",
+        help="Ativa/desativa a entrada avançada com histórico e autocompletar (padrão: True)",
     )
     group.add_argument(
         "--multiline",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Enable/disable multi-line input mode with Meta-Enter to submit (default: False)",
+        help="Ativa/desativa a entrada em várias linhas com Meta-Enter para enviar (padrão: False)",
     )
     group.add_argument(
         "--notifications",
         action=argparse.BooleanOptionalAction,
         default=False,
         help=(
-            "Enable/disable terminal bell notifications when LLM responses are ready (default:"
+            "Ativa/desativa avisos sonoros no terminal quando as respostas do modelo estiverem prontas (padrão:"
             " False)"
         ),
     )
@@ -826,19 +826,19 @@ def get_parser(default_config_files, git_root):
         metavar="COMMAND",
         default=None,
         help=(
-            "Specify a command to run for notifications instead of the terminal bell. If not"
-            " specified, a default command for your OS may be used."
+            "Especifica um comando para notificações em vez do aviso sonoro do terminal. Se não for"
+            " informado, poderá ser usado um comando padrão do sistema operacional."
         ),
     )
     group.add_argument(
         "--detect-urls",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Enable/disable detection and offering to add URLs to chat (default: True)",
+        help="Ativa/desativa a detecção e a sugestão de adicionar URLs ao chat (padrão: True)",
     )
     group.add_argument(
         "--editor",
-        help="Specify which editor to use for the /editor command",
+        help="Especifica o editor usado pelo comando /editor",
     )
 
     supported_shells_list = sorted(list(shtab.SUPPORTED_SHELLS))
@@ -847,14 +847,14 @@ def get_parser(default_config_files, git_root):
         metavar="SHELL",
         choices=supported_shells_list,
         help=(
-            "Print shell completion script for the specified SHELL and exit. Supported shells:"
-            f" {', '.join(supported_shells_list)}. Example: aider --shell-completions bash"
+            "Exibe o script de autocompletar para o SHELL informado e encerra. Shells compatíveis:"
+            f" {', '.join(supported_shells_list)}. Exemplo: aider --shell-completions bash"
         ),
     )
 
     ##########
-    group = parser.add_argument_group("Deprecated model settings")
-    # Add deprecated model shortcut arguments
+    group = parser.add_argument_group("Configurações obsoletas de modelos")
+    # Adiciona os atalhos obsoletos de modelos
     add_deprecated_model_args(parser, group)
 
     return parser
@@ -865,7 +865,7 @@ def get_md_help():
     sys.argv = ["aider"]
     parser = get_parser([], None)
 
-    # This instantiates all the action.env_var values
+    # Inicializa todos os valores de action.env_var
     parser.parse_known_args()
 
     parser.formatter_class = MarkdownHelpFormatter
@@ -878,7 +878,7 @@ def get_sample_yaml():
     sys.argv = ["aider"]
     parser = get_parser([], None)
 
-    # This instantiates all the action.env_var values
+    # Inicializa todos os valores de action.env_var
     parser.parse_known_args()
 
     parser.formatter_class = YamlHelpFormatter
@@ -891,7 +891,7 @@ def get_sample_dotenv():
     sys.argv = ["aider"]
     parser = get_parser([], None)
 
-    # This instantiates all the action.env_var values
+    # Inicializa todos os valores de action.env_var
     parser.parse_known_args()
 
     parser.formatter_class = DotEnvFormatter
@@ -903,7 +903,7 @@ def main():
     if len(sys.argv) > 1:
         command = sys.argv[1]
     else:
-        command = "yaml"  # Default to yaml if no command is given
+        command = "yaml"  # Usa yaml por padrão quando nenhum comando é informado
 
     if command == "md":
         print(get_md_help())
@@ -915,19 +915,19 @@ def main():
         if len(sys.argv) > 2:
             shell = sys.argv[2]
             if shell not in shtab.SUPPORTED_SHELLS:
-                print(f"Error: Unsupported shell '{shell}'.", file=sys.stderr)
-                print(f"Supported shells are: {', '.join(shtab.SUPPORTED_SHELLS)}", file=sys.stderr)
+                print(f"Erro: shell não compatível '{shell}'.", file=sys.stderr)
+                print(f"Shells compatíveis: {', '.join(shtab.SUPPORTED_SHELLS)}", file=sys.stderr)
                 sys.exit(1)
             parser = get_parser([], None)
-            parser.prog = "aider"  # Set the program name on the parser
+            parser.prog = "aider"  # Define o nome do programa no analisador
             print(shtab.complete(parser, shell=shell))
         else:
-            print("Error: Please specify a shell for completion.", file=sys.stderr)
-            print(f"Usage: python {sys.argv[0]} completion <shell_name>", file=sys.stderr)
-            print(f"Supported shells are: {', '.join(shtab.SUPPORTED_SHELLS)}", file=sys.stderr)
+            print("Erro: informe um shell para o autocompletar.", file=sys.stderr)
+            print(f"Uso: python {sys.argv[0]} completion <shell_name>", file=sys.stderr)
+            print(f"Shells compatíveis: {', '.join(shtab.SUPPORTED_SHELLS)}", file=sys.stderr)
             sys.exit(1)
     else:
-        # Default to YAML for any other unrecognized argument, or if 'yaml' was explicitly passed
+        # Usa YAML para argumentos não reconhecidos ou quando 'yaml' é informado explicitamente
         print(get_sample_yaml())
 
 
